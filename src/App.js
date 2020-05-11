@@ -31,7 +31,7 @@ import {
 } from 'recharts';
 
 // import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 
 function Chart(props) {
   const theme = useTheme();
