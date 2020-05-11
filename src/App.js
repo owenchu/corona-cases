@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import {
+  Chip,
   CircularProgress,
   Container,
   FormControl,
@@ -67,6 +68,9 @@ function Chart(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  chip: {
+    margin: theme.spacing(0.5),
+  },
   graphContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -78,7 +82,12 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [data, setData] = useState(null);
   const [counties, setCounties] = useState(null);
-  const [selectedCounties, setSelectedCounties] = useState(['Santa Clara']);
+  const [selectedCounties, setSelectedCounties] = useState([
+    'Alameda',
+    'San Francisco',
+    'San Mateo',
+    'Santa Clara',
+  ]);
   const classes = useStyles();
 
   useEffect(() => {
@@ -194,6 +203,18 @@ function App() {
           </Typography>
         </Grid>
         <Grid item container xs={10} spacing={4}>
+          <Grid item xs={12}>
+            {selectedCounties.map((c) => (
+              <Chip
+                className={classes.chip}
+                key={c}
+                label={c}
+                color='primary'
+                onDelete={() => {
+                  setSelectedCounties(selectedCounties.filter((county) => c !== county));
+                }} />
+            ))}
+          </Grid>
           <Grid item xs={12}>
             <Paper className={classes.graphContainer}>
               <Chart title='New Cases' data={chartData} dataKey='newCases' />
