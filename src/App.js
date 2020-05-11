@@ -22,16 +22,16 @@ import React, {
 } from 'react';
 import {
   Bar,
+  Line,
   BarChart,
   CartesianGrid,
+  ComposedChart as RechartsComposedChart,
+  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
-
-// import logo from './logo.svg';
-// import './App.css';
 
 function Chart(props) {
   const theme = useTheme();
@@ -61,6 +61,42 @@ function Chart(props) {
             <Tooltip />
             <Bar dataKey={dataKey} fill="#8884d8" />
           </BarChart>
+        </ResponsiveContainer>
+      }
+    </>
+  );
+}
+
+function ComposedChart(props) {
+  const theme = useTheme();
+  const {title, data, primaryDataKey, secondaryDataKey} = props;
+  return (
+    <>
+      <Typography
+        component='h2'
+        variant='h6'
+        color='primary'
+        gutterBottom>
+        {title}
+      </Typography>
+      {data &&
+        <ResponsiveContainer height='100%' width='100%'>
+          <RechartsComposedChart
+            data={data}
+            margin={{
+              top: theme.spacing(3),
+              right: theme.spacing(3),
+              bottom: theme.spacing(3),
+              left: theme.spacing(3),
+            }}>
+            <CartesianGrid strokeDasharray="2 2" />
+            <XAxis dataKey='date' stroke={theme.palette.text.secondary} angle={-45} textAnchor='end' />
+            <YAxis stroke={theme.palette.text.secondary} allowDecimals={false}/>
+            <Tooltip />
+            <Legend verticalAlign='top' height={30} />
+            <Bar name={title} dataKey={primaryDataKey} fill="#8884d8" />
+            <Line name='5-day Avg' type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
+          </RechartsComposedChart>
         </ResponsiveContainer>
       }
     </>
@@ -161,10 +197,25 @@ function App() {
     if (i === 0) {
       arr[i].newCases = 0;
       arr[i].newDeaths = 0;
+      arr[i].fiveDayAvgNewCases = 0;
+      arr[i].fiveDayAvgNewDeaths = 0;
       return;
     }
+
     arr[i].newCases = arr[i].cases - arr[i - 1].cases;
     arr[i].newDeaths = arr[i].deaths - arr[i - 1].deaths;
+
+    // Compute 5-day averages.
+    var newCases = 0;
+    var newDeaths = 0;
+    var days = 0;
+    for (var j = i; j >= 0 && (i - j) <= 4; --j) {
+      newCases += arr[j].newCases;
+      newDeaths += arr[j].newDeaths;
+      ++days;
+    }
+    arr[i].fiveDayAvgNewCases = Math.ceil(newCases / days);
+    arr[i].fiveDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
 
   return (
@@ -217,12 +268,12 @@ function App() {
           </Grid>
           <Grid item xs={12}>
             <Paper className={classes.graphContainer}>
-              <Chart title='New Cases' data={chartData} dataKey='newCases' />
+              <ComposedChart title='New Cases' data={chartData} primaryDataKey='newCases' secondaryDataKey='fiveDayAvgNewCases' />
             </Paper>
           </Grid>
           <Grid item xs={12}>
             <Paper className={classes.graphContainer}>
-              <Chart title='New Deaths' data={chartData} dataKey='newDeaths' />
+              <ComposedChart title='New Deaths' data={chartData} primaryDataKey='newDeaths' secondaryDataKey='fiveDayAvgNewDeaths' />
             </Paper>
           </Grid>
           <Grid item xs={12}>
