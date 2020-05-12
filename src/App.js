@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import {
   AppBar,
   Box,
+  Button,
   Chip,
   CircularProgress,
   Container,
@@ -175,17 +176,6 @@ function App() {
     fetchData();
   }, []);
 
-  const handleSelectCounties = (e) => {
-    const { options } = e.target;
-    const values = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        values.push(options[i].value);
-      }
-    }
-    setSelectedCounties(values);
-  };
-
   if (!counties) {
     return <CircularProgress />;
   }
@@ -253,6 +243,18 @@ function App() {
                   </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.selectionPanelDetails}>
+                  <Box>
+                    <Button
+                      color='primary'
+                      onClick={() => setSelectedCounties(new Set(counties))}>
+                      Select all
+                    </Button>
+                    <Button
+                      color='primary'
+                      onClick={() => setSelectedCounties(new Set())}>
+                      Clear all
+                    </Button>
+                  </Box>
                   <Box mb={2}>
                     {counties.map((c) => (
                       <Chip
