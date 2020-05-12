@@ -19,6 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "svg": "npx @svgr/cli Blank_California_Map.svg > src/SvgBlankCaliforniaMap.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

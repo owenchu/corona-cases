@@ -38,6 +38,8 @@ import {
   YAxis,
 } from 'recharts';
 
+import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
+
 function Chart(props) {
   const theme = useTheme();
   const {title, data, dataKey} = props;
@@ -117,9 +119,6 @@ const useStyles = makeStyles((theme) => ({
   selectionPanelSummary: {
     width: 800,
   },
-  selectionPanelDetails: {
-    flexDirection: 'column',
-  },
   chip: {
     margin: theme.spacing(0.5),
   },
@@ -179,6 +178,16 @@ function App() {
   if (!counties) {
     return <CircularProgress />;
   }
+
+  const handleToggleCounty = (county) => {
+    const newSet = new Set(selectedCounties);
+    if (selectedCounties.has(county)) {
+      newSet.delete(county);
+    } else {
+      newSet.add(county);
+    }
+    setSelectedCounties(newSet);
+  };
 
   const chartData = [];
   data.forEach((d) => {
@@ -242,45 +251,48 @@ function App() {
                     <b>Selected counties:</b> {Array.from(selectedCounties).sort().join(', ')}
                   </Typography>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.selectionPanelDetails}>
-                  <Box>
-                    <Button
-                      color='primary'
-                      onClick={() => setSelectedCounties(new Set(counties))}>
-                      Select all
-                    </Button>
-                    <Button
-                      color='primary'
-                      onClick={() => setSelectedCounties(new Set())}>
-                      Clear all
-                    </Button>
-                  </Box>
-                  <Box mb={2}>
-                    {counties.map((c) => (
-                      <Chip
-                        className={classes.chip}
-                        key={c}
-                        label={c}
-                        clickable
-                        color={selectedCounties.has(c) ? 'primary' : 'default'}
-                        onClick={() => {
-                          const newSet = new Set(selectedCounties);
-                          if (selectedCounties.has(c)) {
-                            newSet.delete(c);
-                          } else {
-                            newSet.add(c);
-                          }
-                          setSelectedCounties(newSet);
-                        }} />
-                    ))}
-                  </Box>
-                  <Box ml={1}>
-                    <Typography>
-                      <Link href='https://www.counties.org/sites/main/files/imagecache/lightbox/main-images/california_county_map.jpg'>
-                        California County Map (https://counties.org)
-                      </Link>
-                    </Typography>
-                  </Box>
+                <ExpansionPanelDetails>
+                  <Grid container wrap='nowrap' spacing={2}>
+                    <Grid item xs={5}>
+                      <Box>
+                        <Button
+                          color='primary'
+                          onClick={() => setSelectedCounties(new Set(counties))}>
+                          Select all
+                        </Button>
+                        <Button
+                          color='primary'
+                          onClick={() => setSelectedCounties(new Set())}>
+                          Clear all
+                        </Button>
+                      </Box>
+                      <Box mb={2}>
+                        {counties.map((c) => (
+                          <Chip
+                            className={classes.chip}
+                            key={c}
+                            label={c}
+                            clickable
+                            color={selectedCounties.has(c) ? 'primary' : 'default'}
+                            onClick={() => handleToggleCounty(c)} />
+                        ))}
+                      </Box>
+                      <Box ml={1}>
+                        <Typography>
+                          <Link href='https://www.counties.org/sites/main/files/imagecache/lightbox/main-images/california_county_map.jpg'>
+                            California County Map (https://counties.org)
+                          </Link>
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Box pt={4}>
+                        <SvgBlankCaliforniaMap
+                          selectedCounties={selectedCounties}
+                          onToggleCounty={handleToggleCounty} />
+                      </Box>
+                    </Grid>
+                  </Grid>
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </Grid>
