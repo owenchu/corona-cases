@@ -38,6 +38,7 @@ import {
   YAxis,
 } from 'recharts';
 
+import Counties from './Counties';
 import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
 
 function Chart(props) {
@@ -132,7 +133,6 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const [data, setData] = useState(null);
-  const [counties, setCounties] = useState(null);
   const [selectedCounties, setSelectedCounties] = useState(new Set([
     'Alameda',
     'San Francisco',
@@ -140,6 +140,7 @@ function App() {
     'Santa Clara',
   ]));
   const classes = useStyles();
+  const counties = Counties.get('CA');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -167,15 +168,19 @@ function App() {
         prunedData.forEach((v) => {
           v.data.forEach((d) => uniqueCounties.add(d.county));
         });
-        setCounties(Array.from(uniqueCounties.keys()).sort());
+        uniqueCounties.forEach((c) => {
+          if (!counties.has(c)) {
+            console.error(`${c} in data source is not a valid county name.`);
+          }
+        });
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [counties]);
 
-  if (!counties) {
+  if (!data) {
     return <CircularProgress />;
   }
 
@@ -267,7 +272,7 @@ function App() {
                         </Button>
                       </Box>
                       <Box mb={2}>
-                        {counties.map((c) => (
+                        {Array.from(counties).map((c) => (
                           <Chip
                             className={classes.chip}
                             key={c}
@@ -276,13 +281,6 @@ function App() {
                             color={selectedCounties.has(c) ? 'primary' : 'default'}
                             onClick={() => handleToggleCounty(c)} />
                         ))}
-                      </Box>
-                      <Box ml={1}>
-                        <Typography>
-                          <Link href='https://www.counties.org/sites/main/files/imagecache/lightbox/main-images/california_county_map.jpg'>
-                            California County Map (https://counties.org)
-                          </Link>
-                        </Typography>
                       </Box>
                     </Grid>
                     <Grid item xs={7}>
@@ -319,6 +317,9 @@ function App() {
             <Grid item xs={12}>
               <Typography>
                 Data source: <Link href='https://github.com/amazingshellyyy/covid19-api'>amazingshellyyy/covid19-api</Link>
+              </Typography>
+              <Typography>
+                California map: <Link href='https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg'>Wikimedia Commons</Link>
               </Typography>
             </Grid>
           </Grid>
