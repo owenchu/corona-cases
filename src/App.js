@@ -1,21 +1,25 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import {
+  AppBar,
+  Box,
   Chip,
   CircularProgress,
   Container,
-  FormControl,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
   Grid,
-  InputLabel,
   Link,
   Paper,
-  Select,
+  Toolbar,
   Typography,
 } from '@material-ui/core';
 import {
   makeStyles,
   useTheme,
 } from '@material-ui/core/styles';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, {
   useEffect,
   useState,
@@ -104,6 +108,17 @@ function ComposedChart(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  appBarSpacer: theme.mixins.toolbar,
+  container: {
+    width: 960,
+    paddingTop: theme.spacing(2),
+  },
+  selectionPanelSummary: {
+    width: 800,
+  },
+  selectionPanelDetails: {
+    flexDirection: 'column',
+  },
   chip: {
     margin: theme.spacing(0.5),
   },
@@ -118,12 +133,12 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [data, setData] = useState(null);
   const [counties, setCounties] = useState(null);
-  const [selectedCounties, setSelectedCounties] = useState([
+  const [selectedCounties, setSelectedCounties] = useState(new Set([
     'Alameda',
     'San Francisco',
     'San Mateo',
     'Santa Clara',
-  ]);
+  ]));
   const classes = useStyles();
 
   useEffect(() => {
@@ -176,12 +191,11 @@ function App() {
   }
 
   const chartData = [];
-  const selectedCountiesSet = new Set(selectedCounties) ;
   data.forEach((d) => {
     var cases = 0;
     var deaths = 0;
     d.data.forEach((entry) => {
-      if (selectedCountiesSet.has(entry.county)) {
+      if (selectedCounties.has(entry.county)) {
         cases += entry.case;
         deaths += entry.death;
       }
@@ -219,81 +233,84 @@ function App() {
   });
 
   return (
-    <Container>
-      <Grid container wrap='nowrap' spacing={4}>
-        <Grid item xs={2}>
-          <FormControl fullWidth margin='normal'>
-            <InputLabel
-              shrink
-              htmlFor="select-counties">
-              Select Counties
-            </InputLabel>
-            <Select
-              multiple
-              native
-              autoFocus
-              value={selectedCounties}
-              inputProps={{
-                id: 'select-counties',
-                style: {
-                  height: '80vh',
-                },
-              }}
-              onChange={handleSelectCounties}>
-              {counties.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <Typography>
-            <Link href='https://www.counties.org/sites/main/files/imagecache/lightbox/main-images/california_county_map.jpg'>
-              California County Map (https://counties.org)
-            </Link>
+    <>
+      <AppBar elevation={0}>
+        <Toolbar>
+          <Typography component='h1' variant='h5'>
+            Corona Cases
           </Typography>
-        </Grid>
-        <Grid item container xs={10} spacing={4}>
-          <Grid item xs={12}>
-            {selectedCounties.map((c) => (
-              <Chip
-                className={classes.chip}
-                key={c}
-                label={c}
-                color='primary'
-                onDelete={() => {
-                  setSelectedCounties(selectedCounties.filter((county) => c !== county));
-                }} />
-            ))}
+        </Toolbar>
+      </AppBar>
+      <main>
+        <div className={classes.appBarSpacer} />
+        <Container className={classes.container}>
+          <Grid container direction='column' wrap='nowrap' spacing={4}>
+            <Grid item xs={12}>
+              <ExpansionPanel defaultExpanded variant='outlined'>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.selectionPanelSummary} noWrap>
+                    <b>Selected counties:</b> {Array.from(selectedCounties).sort().join(', ')}
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.selectionPanelDetails}>
+                  <Box mb={2}>
+                    {counties.map((c) => (
+                      <Chip
+                        className={classes.chip}
+                        key={c}
+                        label={c}
+                        clickable
+                        color={selectedCounties.has(c) ? 'primary' : 'default'}
+                        onClick={() => {
+                          const newSet = new Set(selectedCounties);
+                          if (selectedCounties.has(c)) {
+                            newSet.delete(c);
+                          } else {
+                            newSet.add(c);
+                          }
+                          setSelectedCounties(newSet);
+                        }} />
+                    ))}
+                  </Box>
+                  <Box ml={1}>
+                    <Typography>
+                      <Link href='https://www.counties.org/sites/main/files/imagecache/lightbox/main-images/california_county_map.jpg'>
+                        California County Map (https://counties.org)
+                      </Link>
+                    </Typography>
+                  </Box>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.graphContainer} variant='outlined'>
+                <ComposedChart title='New Cases' data={chartData} primaryDataKey='newCases' secondaryDataKey='fiveDayAvgNewCases' />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.graphContainer} variant='outlined'>
+                <ComposedChart title='New Deaths' data={chartData} primaryDataKey='newDeaths' secondaryDataKey='fiveDayAvgNewDeaths' />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.graphContainer} variant='outlined'>
+                <Chart title='Total Cases' data={chartData} dataKey='cases' />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.graphContainer} variant='outlined'>
+                <Chart title='Total Deaths' data={chartData} dataKey='deaths' />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                Data source: <Link href='https://github.com/amazingshellyyy/covid19-api'>amazingshellyyy/covid19-api</Link>
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.graphContainer}>
-              <ComposedChart title='New Cases' data={chartData} primaryDataKey='newCases' secondaryDataKey='fiveDayAvgNewCases' />
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.graphContainer}>
-              <ComposedChart title='New Deaths' data={chartData} primaryDataKey='newDeaths' secondaryDataKey='fiveDayAvgNewDeaths' />
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.graphContainer}>
-              <Chart title='Total Cases' data={chartData} dataKey='cases' />
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.graphContainer}>
-              <Chart title='Total Deaths' data={chartData} dataKey='deaths' />
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography>
-              Data source: <Link href='https://github.com/amazingshellyyy/covid19-api'>amazingshellyyy/covid19-api</Link>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Container>
+        </Container>
+      </main>
+    </>
   );
 }
 
