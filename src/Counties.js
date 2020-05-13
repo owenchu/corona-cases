@@ -1,6 +1,6 @@
 export default new Map([
   [
-    'CA',
+    'California',
     new Set([
       "Alameda",
       "Alpine",

@@ -41,6 +41,8 @@ import {
 import Counties from './Counties';
 import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
 
+const NUM_DAYS = 60;
+
 function Chart(props) {
   const theme = useTheme();
   const {title, data, dataKey} = props;
@@ -140,39 +142,14 @@ function App() {
     'Santa Clara',
   ]));
   const classes = useStyles();
-  const counties = Counties.get('CA');
+  const counties = Counties.get('California');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get('https://amazingshellyyy.com/covid19-api/US-CA/countyTimeseries.json');
-        const rawData = result.data;
-        const len = rawData.length;
-
-        const prunedData = [];
-        var lastUniqueDate = null;
-        for (var i = len - 1; i >= 0; --i) {
-          if (lastUniqueDate && dayjs(rawData[i].timeStamp).startOf('day').isSame(lastUniqueDate)) {
-            continue;
-          }
-          lastUniqueDate = dayjs(rawData[i].timeStamp).startOf('day');
-          prunedData.push({
-            date: lastUniqueDate,
-            data: rawData[i].data
-          });
-        }
-        prunedData.reverse();
-        setData(prunedData);
-
-        const uniqueCounties = new Set();
-        prunedData.forEach((v) => {
-          v.data.forEach((d) => uniqueCounties.add(d.county));
-        });
-        uniqueCounties.forEach((c) => {
-          if (!counties.has(c)) {
-            console.error(`${c} in data source is not a valid county name.`);
-          }
-        });
+        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/california?lastdays=${NUM_DAYS}`);
+        setData(result.data);
+        // TODO: Check possible anomalies (e.g., unrecognized counties) in data.
       } catch (error) {
         console.log(error);
       }
@@ -195,20 +172,36 @@ function App() {
   };
 
   const chartData = [];
-  data.forEach((d) => {
-    var cases = 0;
-    var deaths = 0;
-    d.data.forEach((entry) => {
-      if (selectedCounties.has(entry.county)) {
-        cases += entry.case;
-        deaths += entry.death;
-      }
-    });
+  for (var i = NUM_DAYS; i > 0; --i) {
     chartData.push({
-      date: d.date.format('MM/DD'),
-      cases,
-      deaths,
+      date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
+      cases: 0,
+      deaths: 0,
+      newCases: 0,
+      newDeaths: 0,
+      fiveDayAvgNewCases: 0,
+      fiveDayAvgNewDeath: 0,
     });
+  }
+
+  const today = dayjs().startOf('day');
+
+  data.forEach((d) => {
+    // https://alligator.io/js/capitalizing-strings/
+    const county = d.county.trim().toLowerCase().replace(
+        /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+
+    if (!selectedCounties.has(county)) {
+      return;
+    }
+    for (const date in d.timeline.cases) {
+      const offset = NUM_DAYS - today.diff(dayjs(date), 'day');
+      chartData[offset].cases += d.timeline.cases[date];
+    }
+    for (const date in d.timeline.deaths) {
+      const offset = NUM_DAYS - today.diff(dayjs(date), 'day');
+      chartData[offset].deaths += d.timeline.deaths[date];
+    }
   });
 
   chartData.forEach((d, i, arr) => {
@@ -316,7 +309,7 @@ function App() {
             </Grid>
             <Grid item xs={12}>
               <Typography>
-                Data source: <Link href='https://github.com/amazingshellyyy/covid19-api'>amazingshellyyy/covid19-api</Link>
+                Data source: <Link href='https://github.com/NovelCOVID/API'>NovelCOVID/API</Link>
               </Typography>
               <Typography>
                 California map: <Link href='https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg'>Wikimedia Commons</Link>
