@@ -64,7 +64,7 @@ function Chart(props) {
               top: theme.spacing(3),
               right: theme.spacing(3),
               bottom: theme.spacing(3),
-              left: theme.spacing(3),
+              left: theme.spacing(1),
             }}>
             <CartesianGrid strokeDasharray="2 2" />
             <XAxis dataKey='date' stroke={theme.palette.text.secondary} angle={-45} textAnchor='end' />
@@ -95,10 +95,10 @@ function ComposedChart(props) {
           <RechartsComposedChart
             data={data}
             margin={{
-              top: theme.spacing(3),
+              top: theme.spacing(1),
               right: theme.spacing(3),
               bottom: theme.spacing(3),
-              left: theme.spacing(3),
+              left: theme.spacing(1),
             }}>
             <CartesianGrid strokeDasharray="2 2" />
             <XAxis dataKey='date' stroke={theme.palette.text.secondary} angle={-45} textAnchor='end' />
