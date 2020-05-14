@@ -4,6 +4,7 @@ import {
   AppBar,
   Box,
   Button,
+  Checkbox,
   Chip,
   CircularProgress,
   Container,
@@ -18,7 +19,6 @@ import {
   MenuItem,
   Paper,
   Select,
-  Switch,
   Toolbar,
   Typography,
 } from '@material-ui/core';
@@ -134,14 +134,14 @@ const useStyles = makeStyles((theme) => ({
   countySelectionPanelSummary: {
     width: 800,
   },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
   chartControl: {
     marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(2),
   },
-  chip: {
-    margin: theme.spacing(0.5),
-  },
-  graphContainer: {
+  chartContainer: {
     display: 'flex',
     flexDirection: 'column',
     height: 300,
@@ -331,14 +331,16 @@ function App() {
               <FormControlLabel
                 className={classes.chartControl}
                 control={
-                  <Switch
-                    name='compact'
+                  <Checkbox
                     color='primary'
-                    size='small'
                     checked={compact}
                     onChange={() => setCompact(!compact)} />
                 }
-                label='Compact' />
+                label={
+                  <Typography variant='button'>
+                    Compact
+                  </Typography>
+                } />
               <ToggleButtonGroup
                 className={classes.chartControl}
                 exclusive
@@ -351,7 +353,7 @@ function App() {
               </ToggleButtonGroup>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
-              <Paper className={classes.graphContainer} variant='outlined'>
+              <Paper className={classes.chartContainer} variant='outlined'>
                 <ComposedChart
                   title='New Cases'
                   data={chartData}
@@ -362,7 +364,7 @@ function App() {
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
-              <Paper className={classes.graphContainer} variant='outlined'>
+              <Paper className={classes.chartContainer} variant='outlined'>
                 <ComposedChart
                   title='New Deaths'
                   data={chartData}
@@ -373,12 +375,12 @@ function App() {
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
-              <Paper className={classes.graphContainer} variant='outlined'>
+              <Paper className={classes.chartContainer} variant='outlined'>
                 <Chart title='Total Cases' data={chartData} dataKey='cases' />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
-              <Paper className={classes.graphContainer} variant='outlined'>
+              <Paper className={classes.chartContainer} variant='outlined'>
                 <Chart title='Total Deaths' data={chartData} dataKey='deaths' />
               </Paper>
             </Grid>
