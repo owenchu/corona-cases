@@ -94,12 +94,10 @@ function CountySelector(props) {
                     </Typography>
                   } />
                 <Button
-                  color='primary'
                   onClick={handleSelectAll}>
                   Select all
                 </Button>
                 <Button
-                  color='primary'
                   onClick={handleClearAll}>
                   Clear all
                 </Button>

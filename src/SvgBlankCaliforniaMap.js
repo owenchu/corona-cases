@@ -11,7 +11,7 @@ function SvgBlankCaliforniaMap(props) {
   const {selectedCounties, onToggleCounty} = props;
   const svgElementProps = (county) => {
     return {
-      fill: selectedCounties.has(county) ? '#035aa6' : '#cccccc',
+      fill: selectedCounties.has(county) ? '#f0cf85' : '#cccccc',
       onClick: () => onToggleCounty(county),
     };
   };

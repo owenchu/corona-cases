@@ -1,12 +1,23 @@
+import {
+  ThemeProvider,
+  createMuiTheme,
+} from '@material-ui/core/styles';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import rawTheme from './theme.json';
+
+// https://colorhunt.co/palette/167377
+const theme = createMuiTheme(rawTheme);
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

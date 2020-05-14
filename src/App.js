@@ -52,7 +52,6 @@ function Chart(props) {
       <Typography
         component='h2'
         variant='h6'
-        color='primary'
         gutterBottom>
         {title}
       </Typography>
@@ -70,7 +69,7 @@ function Chart(props) {
             <XAxis dataKey='date' stroke={theme.palette.text.secondary} angle={-45} textAnchor='end' />
             <YAxis stroke={theme.palette.text.secondary} allowDecimals={false}/>
             <Tooltip />
-            <Bar dataKey={dataKey} fill="#8884d8" />
+            <Bar dataKey={dataKey} fill="#32afa9" />
           </BarChart>
         </ResponsiveContainer>
       }
@@ -86,7 +85,6 @@ function ComposedChart(props) {
       <Typography
         component='h2'
         variant='h6'
-        color='primary'
         gutterBottom>
         {title}
       </Typography>
@@ -105,7 +103,7 @@ function ComposedChart(props) {
             <YAxis stroke={theme.palette.text.secondary} allowDecimals={false}/>
             <Tooltip />
             <Legend verticalAlign='top' height={30} />
-            <Bar name={primaryDataName} dataKey={primaryDataKey} fill="#8884d8" />
+            <Bar name={primaryDataName} dataKey={primaryDataKey} fill="#32afa9" />
             {secondaryDataName && secondaryDataKey &&
               <Line name={secondaryDataName} type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
             }
@@ -370,10 +368,10 @@ function App() {
             </Grid>
             <Grid item xs={12}>
               <Typography>
-                Data source: <Link href='https://github.com/NovelCOVID/API'>NovelCOVID/API</Link>
+                Data source: <Link href='https://github.com/NovelCOVID/API'><b>NovelCOVID/API</b></Link>
               </Typography>
               <Typography>
-                California map: <Link href='https://commons.wikimedia.org/wiki/Main_Page'>Wikimedia Commons</Link>
+                California map: <Link href='https://commons.wikimedia.org/wiki/Main_Page'><b>Wikimedia Commons</b></Link>
               </Typography>
             </Grid>
           </Grid>
