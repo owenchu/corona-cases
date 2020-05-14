@@ -142,6 +142,7 @@ function App() {
 
   const [data, setData] = useState(null);
   const [selectedState, setSelectedState] = useState(States.get('California'));
+  const [selectedRegions, setSelectedRegions] = useState(new Set(selectedState.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(selectedState.counties);
   const [compact, setCompact] = useState(false);
   const [avgPeriodDays, setAvgPeriodDays] = useState(7);
@@ -164,6 +165,45 @@ function App() {
   if (!data) {
     return <CircularProgress />;
   }
+
+  const handleCountyToggle = (county) => {
+    const newSelectedCounties = new Set(selectedCounties);
+    if (selectedCounties.has(county)) {
+      newSelectedCounties.delete(county);
+    } else {
+      newSelectedCounties.add(county);
+    }
+    setSelectedCounties(newSelectedCounties);
+  };
+  const handleRegionToggle = (region) => {
+    const newSelectedRegions = new Set(selectedRegions);
+    const newSelectedCounties = new Set(selectedCounties);
+    if (selectedRegions.has(region)) {
+      newSelectedRegions.delete(region);
+      selectedState.regions.get(region).forEach((county) => {
+        newSelectedCounties.delete(county);
+      })
+    } else {
+      newSelectedRegions.add(region);
+      selectedState.regions.get(region).forEach((county) => {
+        newSelectedCounties.add(county);
+      })
+    }
+    setSelectedRegions(newSelectedRegions);
+    setSelectedCounties(newSelectedCounties);
+  };
+  const handleSelectionModeChange = () => {
+    setSelectedRegions(new Set(selectedState.regions.keys()));
+    setSelectedCounties(selectedState.counties);
+  };
+  const handleSelectAll = () => {
+    setSelectedRegions(new Set(selectedState.regions.keys()));
+    setSelectedCounties(selectedState.counties);
+  };
+  const handleClearAll = () => {
+    setSelectedRegions(new Set());
+    setSelectedCounties(new Set());
+  };
 
   const chartData = [];
   for (var i = numDays - 1; i >= 0; --i) {
@@ -249,8 +289,10 @@ function App() {
                   labelId='state-select-label'
                   value={selectedState.name}
                   onChange={(e) => {
-                    setSelectedState(States.get(e.target.value));
-                    setSelectedCounties(States.get(e.target.value).counties)
+                    const state = States.get(e.target.value);
+                    setSelectedState(state);
+                    setSelectedRegions(new Set(state.regions.keys()));
+                    setSelectedCounties(state.counties)
                   }} >
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -262,14 +304,19 @@ function App() {
               <CountySelector
                 state={selectedState}
                 selectedCounties={selectedCounties}
-                onChange={setSelectedCounties} />
+                onCountyToggle={handleCountyToggle}
+                selectedRegions={selectedRegions}
+                onRegionToggle={handleRegionToggle}
+                onSelectionModeChange={handleSelectionModeChange}
+                onSelectAll={handleSelectAll}
+                onClearAll={handleClearAll} />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
                 className={classes.chartControl}
                 control={
                   <Checkbox
-                    color='primary'
+                    color='default'
                     checked={compact}
                     onChange={() => setCompact(!compact)} />
                 }

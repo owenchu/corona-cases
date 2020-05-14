@@ -1,20 +1,25 @@
 import {
   Box,
   Button,
+  Checkbox,
   Chip,
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
+  FormControlLabel,
   Grid,
   Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import React, {useState} from 'react';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
   countySelectionPanelSummary: {
     width: 800,
+  },
+  regionModeControl: {
+    marginLeft: theme.spacing(0),
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -22,19 +27,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CountySelector(props) {
-  const {state, selectedCounties, onChange} = props;
+  const {
+    state,
+    selectedCounties,
+    onCountyToggle,
+    selectedRegions,
+    onRegionToggle,
+    onSelectionModeChange,
+    onSelectAll,
+    onClearAll,
+  } = props;
+  const [regionMode, setRegionMode] = useState(true);
   const classes = useStyles();
 
-  const handleSelectAll = () => onChange(new Set(state.counties));
-  const handleClearAll = () => onChange(new Set());
-  const handleToggle = (county) => {
-    const newSelectedCounties = new Set(selectedCounties);
-    if (selectedCounties.has(county)) {
-      newSelectedCounties.delete(county);
+  const handleModeChange = () => {
+    setRegionMode(!regionMode);
+    onSelectionModeChange();
+  }
+  const handleSelectAll = () => {
+    onSelectAll();
+  };
+  const handleClearAll = () => {
+    onClearAll();
+  };
+  const handleToggleCounty = (county) => {
+    if (regionMode) {
+      for (const [region, counties] of state.regions) {
+        if (counties.has(county)) {
+          onRegionToggle(region);
+          return;
+        }
+      }
     } else {
-      newSelectedCounties.add(county);
+      onCountyToggle(county);
     }
-    onChange(newSelectedCounties);
+  };
+  const handleRegionClick = (region) => {
+    onRegionToggle(region);
   };
 
   const Map = state.mapComponent;
@@ -50,7 +79,20 @@ function CountySelector(props) {
         <ExpansionPanelDetails>
           <Grid container wrap='nowrap' spacing={2}>
             <Grid item xs={5}>
-              <Box>
+              <Box mb={1}>
+                <FormControlLabel
+                  className={classes.regionModeControl}
+                  control={
+                    <Checkbox
+                      color='default'
+                      checked={regionMode}
+                      onChange={handleModeChange} />
+                  }
+                  label={
+                    <Typography variant='button'>
+                      Region Mode
+                    </Typography>
+                  } />
                 <Button
                   color='primary'
                   onClick={handleSelectAll}>
@@ -63,22 +105,34 @@ function CountySelector(props) {
                 </Button>
               </Box>
               <Box mb={2}>
-                {Array.from(state.counties).map((c) => (
-                  <Chip
-                    className={classes.chip}
-                    key={c}
-                    label={c}
-                    clickable
-                    color={selectedCounties.has(c) ? 'primary' : 'default'}
-                    onClick={handleToggle.bind(this, c)} />
-                ))}
+                {regionMode ? (
+                  Array.from(state.regions.keys()).map((r) => (
+                    <Chip
+                      className={classes.chip}
+                      key={r}
+                      label={r}
+                      clickable
+                      color={selectedRegions.has(r) ? 'primary' : 'default'}
+                      onClick={handleRegionClick.bind(this, r)} />
+                  ))
+                ) : (
+                  Array.from(state.counties).map((c) => (
+                    <Chip
+                      className={classes.chip}
+                      key={c}
+                      label={c}
+                      clickable
+                      color={selectedCounties.has(c) ? 'primary' : 'default'}
+                      onClick={handleToggleCounty.bind(this, c)} />
+                  ))
+                )}
               </Box>
             </Grid>
             <Grid item container alignItems='center' xs={7}>
               <Grid item xs={12}>
                 <Map
                   selectedCounties={selectedCounties}
-                  onToggleCounty={handleToggle} />
+                  onToggleCounty={handleToggleCounty} />
               </Grid>
             </Grid>
           </Grid>

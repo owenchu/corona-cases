@@ -66,6 +66,113 @@ export default new Map([
         "Yolo",
         "Yuba",
       ]),
+      // https://census.ca.gov/regions/
+      regions: new Map([
+        [
+          'Central Coast',
+          new Set([
+            'Monterey',
+            'San Benito',
+            'San Luis Obispo',
+            'Santa Barbara',
+            'Santa Cruz',
+            'Ventura',
+          ]),
+        ],
+        [
+          'Inland Empire',
+          new Set([
+            'Riverside',
+            'San Bernardino',
+          ]),
+        ],
+        [
+          'Los Angeles County',
+          new Set(['Los Angeles']),
+        ],
+        [
+          'North Coast',
+          new Set([
+            'Del Norte',
+            'Humboldt',
+            'Lake',
+            'Mendocino',
+            'Napa',
+            'Sonoma',
+            'Trinity',
+          ]),
+        ],
+        [
+          'Northern San Joaquin Valley',
+          new Set([
+            'Alpine',
+            'Amador',
+            'Calaveras',
+            'Madera',
+            'Mariposa',
+            'Merced',
+            'Mono',
+            'San Joaquin',
+            'Stanislaus',
+            'Tuolumne',
+          ]),
+        ],
+        [
+          'Orange County',
+          new Set(['Orange']),
+        ],
+        [
+          'San Diego - Imperial',
+          new Set([
+            'Imperial',
+            'San Diego',
+          ]),
+        ],
+        [
+          'San Francisco Bay Area',
+          new Set([
+            'Alameda',
+            'Contra Costa',
+            'Marin',
+            'San Francisco',
+            'San Mateo',
+            'Santa Clara',
+            'Solano',
+          ]),
+        ],
+        [
+          'Southern San Joaquin Valley',
+          new Set([
+            'Fresno',
+            'Inyo',
+            'Kern',
+            'Kings',
+            'Tulare',
+          ]),
+        ],
+        [
+          'Superior California',
+          new Set([
+            'Butte',
+            'Colusa',
+            'El Dorado',
+            'Glenn',
+            'Lassen',
+            'Modoc',
+            'Nevada',
+            'Placer',
+            'Plumas',
+            'Sacramento',
+            'Shasta',
+            'Sierra',
+            'Siskiyou',
+            'Sutter',
+            'Tehama',
+            'Yolo',
+            'Yuba',
+          ]),
+        ],
+      ]),
     }
   ],
   [
@@ -135,6 +242,121 @@ export default new Map([
         'Westchester',
         'Wyoming',
         'Yates',
+      ]),
+      // https://forward.ny.gov/regional-monitoring-dashboard
+      regions: new Map([
+        [
+          'Capital Region',
+          new Set([
+            'Albany',
+            'Columbia',
+            'Greene',
+            'Rensselaer',
+            'Saratoga',
+            'Schenectady',
+            'Warren',
+            'Washington',
+          ]),
+        ],
+        [
+          'Central New York',
+          new Set([
+            'Cayuga',
+            'Cortland',
+            'Madison',
+            'Onondaga',
+            'Oswego',
+          ]),
+        ],
+        [
+          'Finger Lakes',
+          new Set([
+            'Genesee',
+            'Livingston',
+            'Monroe',
+            'Ontario',
+            'Orleans',
+            'Seneca',
+            'Wayne',
+            'Wyoming',
+            'Yates',
+          ]),
+        ],
+        [
+          'Long Island',
+          new Set([
+            'Nassau',
+            'Suffolk',
+          ]),
+        ],
+        [
+          'Mid-Hudson',
+          new Set([
+            'Dutchess',
+            'Orange',
+            'Putnam',
+            'Rockland',
+            'Sullivan',
+            'Ulster',
+            'Westchester',
+          ]),
+        ],
+        [
+          'Mohawk Valley',
+          new Set([
+            'Fulton',
+            'Herkimer',
+            'Montgomery',
+            'Oneida',
+            'Otsego',
+            'Schoharie',
+          ]),
+        ],
+        [
+          'New York City',
+          new Set([
+            'Bronx',
+            'Kings',
+            'New York',
+            'Queens',
+            'Richmond',
+          ]),
+        ],
+        [
+          'North Country',
+          new Set([
+            'Clinton',
+            'Essex',
+            'Franklin',
+            'Hamilton',
+            'Jefferson',
+            'Lewis',
+            'St. Lawrence',
+          ]),
+        ],
+        [
+          'Southern Tier',
+          new Set([
+            'Broome',
+            'Chemung',
+            'Chenango',
+            'Delaware',
+            'Schuyler',
+            'Steuben',
+            'Tioga',
+            'Tompkins',
+          ]),
+        ],
+        [
+          'Western New York',
+          new Set([
+            'Allegany',
+            'Cattaraugus',
+            'Chautauqua',
+            'Erie',
+            'Niagara',
+          ]),
+        ],
       ]),
     }
   ],
