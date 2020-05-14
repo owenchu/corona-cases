@@ -10,9 +10,13 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
+  FormControl,
   Grid,
+  InputLabel,
   Link,
+  MenuItem,
   Paper,
+  Select,
   Toolbar,
   Typography,
 } from '@material-ui/core';
@@ -38,10 +42,7 @@ import {
   YAxis,
 } from 'recharts';
 
-import Counties from './Counties';
-import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
-
-const NUM_DAYS = 60;
+import States from './States';
 
 function Chart(props) {
   const theme = useTheme();
@@ -119,7 +120,10 @@ const useStyles = makeStyles((theme) => ({
     width: 960,
     paddingTop: theme.spacing(2),
   },
-  selectionPanelSummary: {
+  stateSelectionFormControl: {
+    minWidth: 200,
+  },
+  countySelectionPanelSummary: {
     width: 800,
   },
   chip: {
@@ -134,28 +138,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const numDays = 60;
+
   const [data, setData] = useState(null);
-  const [selectedCounties, setSelectedCounties] = useState(new Set([
-    'Alameda',
-    'San Francisco',
-    'San Mateo',
-    'Santa Clara',
-  ]));
+  const [selectedState, setSelectedState] = useState(States.get('California'));
+  const [selectedCounties, setSelectedCounties] = useState(selectedState.counties);
   const classes = useStyles();
-  const counties = Counties.get('California');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/california?lastdays=${NUM_DAYS}`);
+        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${selectedState.name.toLowerCase()}?lastdays=${numDays}`);
         setData(result.data);
         // TODO: Check possible anomalies (e.g., unrecognized counties) in data.
       } catch (error) {
         console.log(error);
+        setData(null);
       }
     };
     fetchData();
-  }, [counties]);
+  }, [selectedState]);
 
   if (!data) {
     return <CircularProgress />;
@@ -172,7 +174,7 @@ function App() {
   };
 
   const chartData = [];
-  for (var i = NUM_DAYS; i > 0; --i) {
+  for (var i = numDays; i > 0; --i) {
     chartData.push({
       date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
       cases: 0,
@@ -195,11 +197,11 @@ function App() {
       return;
     }
     for (const date in d.timeline.cases) {
-      const offset = NUM_DAYS - today.diff(dayjs(date), 'day');
+      const offset = numDays - today.diff(dayjs(date), 'day');
       chartData[offset].cases += d.timeline.cases[date];
     }
     for (const date in d.timeline.deaths) {
-      const offset = NUM_DAYS - today.diff(dayjs(date), 'day');
+      const offset = numDays - today.diff(dayjs(date), 'day');
       chartData[offset].deaths += d.timeline.deaths[date];
     }
   });
@@ -229,6 +231,8 @@ function App() {
     arr[i].fiveDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
 
+  const Map = selectedState.mapComponent;
+
   return (
     <>
       <AppBar elevation={0}>
@@ -243,9 +247,26 @@ function App() {
         <Container className={classes.container}>
           <Grid container direction='column' wrap='nowrap' spacing={4}>
             <Grid item xs={12}>
+              <FormControl className={classes.stateSelectionFormControl}>
+                <InputLabel id='state-select-label'>State</InputLabel>
+                <Select
+                  id='state-select'
+                  labelId='state-select-label'
+                  value={selectedState.name}
+                  onChange={(e) => {
+                    setSelectedState(States.get(e.target.value));
+                    setSelectedCounties(States.get(e.target.value).counties)
+                  }} >
+                  {Array.from(States.keys()).map((s) =>
+                    <MenuItem key={s} value={s}>{s}</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
               <ExpansionPanel defaultExpanded variant='outlined'>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography className={classes.selectionPanelSummary} noWrap>
+                  <Typography className={classes.countySelectionPanelSummary} noWrap>
                     <b>Selected counties:</b> {Array.from(selectedCounties).sort().join(', ')}
                   </Typography>
                 </ExpansionPanelSummary>
@@ -255,7 +276,7 @@ function App() {
                       <Box>
                         <Button
                           color='primary'
-                          onClick={() => setSelectedCounties(new Set(counties))}>
+                          onClick={() => setSelectedCounties(new Set(selectedState.counties))}>
                           Select all
                         </Button>
                         <Button
@@ -265,7 +286,7 @@ function App() {
                         </Button>
                       </Box>
                       <Box mb={2}>
-                        {Array.from(counties).map((c) => (
+                        {Array.from(selectedState.counties).map((c) => (
                           <Chip
                             className={classes.chip}
                             key={c}
@@ -276,12 +297,12 @@ function App() {
                         ))}
                       </Box>
                     </Grid>
-                    <Grid item xs={7}>
-                      <Box pt={4}>
-                        <SvgBlankCaliforniaMap
+                    <Grid item container alignItems='center' xs={7}>
+                      <Grid item xs={12}>
+                        <Map
                           selectedCounties={selectedCounties}
                           onToggleCounty={handleToggleCounty} />
-                      </Box>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </ExpansionPanelDetails>
