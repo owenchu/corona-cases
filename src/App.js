@@ -341,7 +341,7 @@ function App() {
                 Data source: <Link href='https://github.com/NovelCOVID/API'>NovelCOVID/API</Link>
               </Typography>
               <Typography>
-                California map: <Link href='https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg'>Wikimedia Commons</Link>
+                California map: <Link href='https://commons.wikimedia.org/wiki/Main_Page'>Wikimedia Commons</Link>
               </Typography>
             </Grid>
           </Grid>
