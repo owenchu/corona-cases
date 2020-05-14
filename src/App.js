@@ -112,7 +112,9 @@ function ComposedChart(props) {
             <Tooltip />
             <Legend verticalAlign='top' height={30} />
             <Bar name={primaryDataName} dataKey={primaryDataKey} fill="#8884d8" />
-            <Line name={secondaryDataName} type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
+            {secondaryDataName && secondaryDataKey &&
+              <Line name={secondaryDataName} type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
+            }
           </RechartsComposedChart>
         </ResponsiveContainer>
       }
@@ -355,8 +357,8 @@ function App() {
                   data={chartData}
                   primaryDataName='New cases'
                   primaryDataKey='newCases'
-                  secondaryDataName={`${avgPeriodDays}-day average`}
-                  secondaryDataKey='sevenDayAvgNewCases' />
+                  secondaryDataName={avgPeriodDays && `${avgPeriodDays}-day average`}
+                  secondaryDataKey={avgPeriodDays && 'sevenDayAvgNewCases'} />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
@@ -366,8 +368,8 @@ function App() {
                   data={chartData}
                   primaryDataName='New deaths'
                   primaryDataKey='newDeaths'
-                  secondaryDataName={`${avgPeriodDays}-day average`}
-                  secondaryDataKey='sevenDayAvgNewDeaths' />
+                  secondaryDataName={avgPeriodDays && `${avgPeriodDays}-day average`}
+                  secondaryDataKey={avgPeriodDays && 'sevenDayAvgNewDeaths'} />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
