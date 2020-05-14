@@ -80,7 +80,7 @@ function Chart(props) {
 
 function ComposedChart(props) {
   const theme = useTheme();
-  const {title, data, primaryDataKey, secondaryDataKey} = props;
+  const {title, data, primaryDataName, primaryDataKey, secondaryDataName, secondaryDataKey} = props;
   return (
     <>
       <Typography
@@ -105,8 +105,8 @@ function ComposedChart(props) {
             <YAxis stroke={theme.palette.text.secondary} allowDecimals={false}/>
             <Tooltip />
             <Legend verticalAlign='top' height={30} />
-            <Bar name={title} dataKey={primaryDataKey} fill="#8884d8" />
-            <Line name='5-day Avg' type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
+            <Bar name={primaryDataName} dataKey={primaryDataKey} fill="#8884d8" />
+            <Line name={secondaryDataName} type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
           </RechartsComposedChart>
         </ResponsiveContainer>
       }
@@ -181,8 +181,8 @@ function App() {
       deaths: 0,
       newCases: 0,
       newDeaths: 0,
-      fiveDayAvgNewCases: 0,
-      fiveDayAvgNewDeath: 0,
+      sevenDayAvgNewCases: 0,
+      sevenDayAvgNewDeaths: 0,
     });
   }
 
@@ -208,27 +208,23 @@ function App() {
 
   chartData.forEach((d, i, arr) => {
     if (i === 0) {
-      arr[i].newCases = 0;
-      arr[i].newDeaths = 0;
-      arr[i].fiveDayAvgNewCases = 0;
-      arr[i].fiveDayAvgNewDeaths = 0;
       return;
     }
 
     arr[i].newCases = arr[i].cases - arr[i - 1].cases;
     arr[i].newDeaths = arr[i].deaths - arr[i - 1].deaths;
 
-    // Compute 5-day averages.
+    // Compute 7-day averages.
     var newCases = 0;
     var newDeaths = 0;
     var days = 0;
-    for (var j = i; j >= 0 && (i - j) <= 4; --j) {
+    for (var j = i; j >= 0 && (i - j) <= 6; --j) {
       newCases += arr[j].newCases;
       newDeaths += arr[j].newDeaths;
       ++days;
     }
-    arr[i].fiveDayAvgNewCases = Math.ceil(newCases / days);
-    arr[i].fiveDayAvgNewDeaths = Math.ceil(newDeaths / days);
+    arr[i].sevenDayAvgNewCases = Math.ceil(newCases / days);
+    arr[i].sevenDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
 
   const Map = selectedState.mapComponent;
@@ -310,12 +306,24 @@ function App() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.graphContainer} variant='outlined'>
-                <ComposedChart title='New Cases' data={chartData} primaryDataKey='newCases' secondaryDataKey='fiveDayAvgNewCases' />
+                <ComposedChart
+                  title='New Cases'
+                  data={chartData}
+                  primaryDataName='New cases'
+                  primaryDataKey='newCases'
+                  secondaryDataName='7-day average'
+                  secondaryDataKey='sevenDayAvgNewCases' />
               </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.graphContainer} variant='outlined'>
-                <ComposedChart title='New Deaths' data={chartData} primaryDataKey='newDeaths' secondaryDataKey='fiveDayAvgNewDeaths' />
+                <ComposedChart
+                  title='New Deaths'
+                  data={chartData}
+                  primaryDataName='New deaths'
+                  primaryDataKey='newDeaths'
+                  secondaryDataName='7-day average'
+                  secondaryDataKey='sevenDayAvgNewDeaths' />
               </Paper>
             </Grid>
             <Grid item xs={12}>
