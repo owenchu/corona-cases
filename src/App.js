@@ -11,12 +11,14 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   FormControl,
+  FormControlLabel,
   Grid,
   InputLabel,
   Link,
   MenuItem,
   Paper,
   Select,
+  Switch,
   Toolbar,
   Typography,
 } from '@material-ui/core';
@@ -25,6 +27,10 @@ import {
   useTheme,
 } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {
+  ToggleButton,
+  ToggleButtonGroup,
+} from '@material-ui/lab';
 import React, {
   useEffect,
   useState,
@@ -126,6 +132,10 @@ const useStyles = makeStyles((theme) => ({
   countySelectionPanelSummary: {
     width: 800,
   },
+  chartControl: {
+    marginLeft: theme.spacing(0.5),
+    marginRight: theme.spacing(2),
+  },
   chip: {
     margin: theme.spacing(0.5),
   },
@@ -143,6 +153,8 @@ function App() {
   const [data, setData] = useState(null);
   const [selectedState, setSelectedState] = useState(States.get('California'));
   const [selectedCounties, setSelectedCounties] = useState(selectedState.counties);
+  const [compact, setCompact] = useState(false);
+  const [avgPeriodDays, setAvgPeriodDays] = useState(7);
   const classes = useStyles();
 
   useEffect(() => {
@@ -218,7 +230,7 @@ function App() {
     var newCases = 0;
     var newDeaths = 0;
     var days = 0;
-    for (var j = i; j >= 0 && (i - j) <= 6; --j) {
+    for (var j = i; j >= 0 && (i - j) < avgPeriodDays; --j) {
       newCases += arr[j].newCases;
       newDeaths += arr[j].newDeaths;
       ++days;
@@ -241,7 +253,7 @@ function App() {
       <main>
         <div className={classes.appBarSpacer} />
         <Container className={classes.container}>
-          <Grid container direction='column' wrap='nowrap' spacing={4}>
+          <Grid container spacing={4}>
             <Grid item xs={12}>
               <FormControl className={classes.stateSelectionFormControl}>
                 <InputLabel id='state-select-label'>State</InputLabel>
@@ -305,33 +317,56 @@ function App() {
               </ExpansionPanel>
             </Grid>
             <Grid item xs={12}>
+              <FormControlLabel
+                className={classes.chartControl}
+                control={
+                  <Switch
+                    name='compact'
+                    color='primary'
+                    size='small'
+                    checked={compact}
+                    onChange={() => setCompact(!compact)} />
+                }
+                label='Compact' />
+              <ToggleButtonGroup
+                className={classes.chartControl}
+                exclusive
+                size='small'
+                value={avgPeriodDays}
+                onChange={(e, v) => setAvgPeriodDays(v)}>
+                <ToggleButton value={3}>3-day avg</ToggleButton>
+                <ToggleButton value={5}>5-day avg</ToggleButton>
+                <ToggleButton value={7}>7-day avg</ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+            <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.graphContainer} variant='outlined'>
                 <ComposedChart
                   title='New Cases'
                   data={chartData}
                   primaryDataName='New cases'
                   primaryDataKey='newCases'
-                  secondaryDataName='7-day average'
+                  secondaryDataName={`${avgPeriodDays}-day average`}
                   secondaryDataKey='sevenDayAvgNewCases' />
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.graphContainer} variant='outlined'>
                 <ComposedChart
                   title='New Deaths'
                   data={chartData}
                   primaryDataName='New deaths'
                   primaryDataKey='newDeaths'
-                  secondaryDataName='7-day average'
+                  secondaryDataName={`${avgPeriodDays}-day average`}
                   secondaryDataKey='sevenDayAvgNewDeaths' />
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.graphContainer} variant='outlined'>
                 <Chart title='Total Cases' data={chartData} dataKey='cases' />
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.graphContainer} variant='outlined'>
                 <Chart title='Total Deaths' data={chartData} dataKey='deaths' />
               </Paper>
