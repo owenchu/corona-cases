@@ -174,7 +174,7 @@ function App() {
   };
 
   const chartData = [];
-  for (var i = numDays; i > 0; --i) {
+  for (var i = numDays - 1; i >= 0; --i) {
     chartData.push({
       date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
       cases: 0,
@@ -197,11 +197,11 @@ function App() {
       return;
     }
     for (const date in d.timeline.cases) {
-      const offset = numDays - today.diff(dayjs(date), 'day');
+      const offset = numDays - today.diff(dayjs(date), 'day') - 1;
       chartData[offset].cases += d.timeline.cases[date];
     }
     for (const date in d.timeline.deaths) {
-      const offset = numDays - today.diff(dayjs(date), 'day');
+      const offset = numDays - today.diff(dayjs(date), 'day') - 1;
       chartData[offset].deaths += d.timeline.deaths[date];
     }
   });
