@@ -210,13 +210,22 @@ function App() {
     }
     for (const date in d.timeline.cases) {
       const offset = numDays - today.diff(dayjs(date), 'day') - 1;
-      chartData[offset].cases += d.timeline.cases[date];
+      if (offset >= 0) {
+        chartData[offset].cases += d.timeline.cases[date];
+      }
     }
     for (const date in d.timeline.deaths) {
       const offset = numDays - today.diff(dayjs(date), 'day') - 1;
-      chartData[offset].deaths += d.timeline.deaths[date];
+      if (offset >= 0) {
+        chartData[offset].deaths += d.timeline.deaths[date];
+      }
     }
   });
+
+  const lastEntry = chartData[chartData.length - 1];
+  if (lastEntry.cases === 0 && lastEntry.deaths === 0) {
+    chartData.pop();
+  }
 
   chartData.forEach((d, i, arr) => {
     if (i === 0) {
