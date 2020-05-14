@@ -2,15 +2,9 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import {
   AppBar,
-  Box,
-  Button,
   Checkbox,
-  Chip,
   CircularProgress,
   Container,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
   FormControl,
   FormControlLabel,
   Grid,
@@ -26,7 +20,6 @@ import {
   makeStyles,
   useTheme,
 } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   ToggleButton,
   ToggleButtonGroup,
@@ -48,6 +41,7 @@ import {
   YAxis,
 } from 'recharts';
 
+import CountySelector from './CountySelector';
 import States from './States';
 
 function Chart(props) {
@@ -131,12 +125,6 @@ const useStyles = makeStyles((theme) => ({
   stateSelectionFormControl: {
     minWidth: 200,
   },
-  countySelectionPanelSummary: {
-    width: 800,
-  },
-  chip: {
-    margin: theme.spacing(0.5),
-  },
   chartControl: {
     marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(2),
@@ -176,16 +164,6 @@ function App() {
   if (!data) {
     return <CircularProgress />;
   }
-
-  const handleToggleCounty = (county) => {
-    const newSet = new Set(selectedCounties);
-    if (selectedCounties.has(county)) {
-      newSet.delete(county);
-    } else {
-      newSet.add(county);
-    }
-    setSelectedCounties(newSet);
-  };
 
   const chartData = [];
   for (var i = numDays - 1; i >= 0; --i) {
@@ -250,8 +228,6 @@ function App() {
     arr[i].sevenDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
 
-  const Map = selectedState.mapComponent;
-
   return (
     <>
       <AppBar elevation={0}>
@@ -283,49 +259,10 @@ function App() {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <ExpansionPanel defaultExpanded variant='outlined'>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography className={classes.countySelectionPanelSummary} noWrap>
-                    <b>Selected counties:</b> {Array.from(selectedCounties).sort().join(', ')}
-                  </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <Grid container wrap='nowrap' spacing={2}>
-                    <Grid item xs={5}>
-                      <Box>
-                        <Button
-                          color='primary'
-                          onClick={() => setSelectedCounties(new Set(selectedState.counties))}>
-                          Select all
-                        </Button>
-                        <Button
-                          color='primary'
-                          onClick={() => setSelectedCounties(new Set())}>
-                          Clear all
-                        </Button>
-                      </Box>
-                      <Box mb={2}>
-                        {Array.from(selectedState.counties).map((c) => (
-                          <Chip
-                            className={classes.chip}
-                            key={c}
-                            label={c}
-                            clickable
-                            color={selectedCounties.has(c) ? 'primary' : 'default'}
-                            onClick={() => handleToggleCounty(c)} />
-                        ))}
-                      </Box>
-                    </Grid>
-                    <Grid item container alignItems='center' xs={7}>
-                      <Grid item xs={12}>
-                        <Map
-                          selectedCounties={selectedCounties}
-                          onToggleCounty={handleToggleCounty} />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
+              <CountySelector
+                state={selectedState}
+                selectedCounties={selectedCounties}
+                onChange={setSelectedCounties} />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
