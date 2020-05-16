@@ -114,6 +114,33 @@ function ComposedChart(props) {
   );
 }
 
+// https://alligator.io/js/capitalizing-strings.
+function CapitalizeCountyName(county) {
+    return county.trim().toLowerCase().replace(
+        /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+}
+
+function NormalizeCountyName(state, county) {
+    switch (state) {
+      case 'Illinois':
+        switch (county) {
+          case 'dekalb': return 'DeKalb';
+          case 'de witt': return 'DeWitt';
+          case 'dupage': return 'DuPage';
+          case 'lasalle': return 'LaSalle';
+          case 'mcdonough': return 'McDonough';
+          case 'mchenry': return 'McHenry';
+          case 'mclean': return 'McLean';
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+    return CapitalizeCountyName(county);
+}
+
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
   container: {
@@ -150,8 +177,16 @@ function App() {
     const fetchData = async () => {
       try {
         const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${selectedState.name.toLowerCase()}?lastdays=${numDays}`);
+        result.data.forEach((d) => {
+          if (d.county.startsWith('out of') || d.county === 'unassigned') {
+            return;
+          }
+          const county = NormalizeCountyName(selectedState.name, d.county);
+          if (!selectedState.counties.has(county)) {
+            console.error(`Unrecognized county: ${county}`);
+          }
+        });
         setData(result.data);
-        // TODO: Check possible anomalies (e.g., unrecognized counties) in data.
       } catch (error) {
         console.log(error);
         setData(null);
@@ -220,8 +255,7 @@ function App() {
 
   data.forEach((d) => {
     // Normalize county names: https://alligator.io/js/capitalizing-strings.
-    const county = d.county.trim().toLowerCase().replace(
-        /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+    const county = NormalizeCountyName(selectedState.name, d.county);
 
     if (!selectedCounties.has(county)) {
       return;
@@ -371,7 +405,7 @@ function App() {
                 Data source: <Link href='https://github.com/NovelCOVID/API'><b>NovelCOVID/API</b></Link>
               </Typography>
               <Typography>
-                California map: <Link href='https://commons.wikimedia.org/wiki/Main_Page'><b>Wikimedia Commons</b></Link>
+                Maps: <Link href='https://commons.wikimedia.org/wiki/Main_Page'><b>Wikimedia Commons</b></Link>
               </Typography>
             </Grid>
           </Grid>
