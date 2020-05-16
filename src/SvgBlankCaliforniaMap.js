@@ -18,7 +18,6 @@ function SvgBlankCaliforniaMap(props) {
   const classes = useStyles();
   return (
     <svg
-      id="Map_of_the_counties_of_California_x2C__without_legend"
       viewBox='0 0 620.843 733.026'
       xmlSpace="preserve"
     >

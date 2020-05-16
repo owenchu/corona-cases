@@ -219,7 +219,7 @@ function App() {
   const today = dayjs().startOf('day');
 
   data.forEach((d) => {
-    // https://alligator.io/js/capitalizing-strings/
+    // Normalize county names: https://alligator.io/js/capitalizing-strings.
     const county = d.county.trim().toLowerCase().replace(
         /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 

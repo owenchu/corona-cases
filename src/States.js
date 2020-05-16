@@ -1,10 +1,12 @@
 import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
+import SvgBlankNewJerseyMap from './SvgBlankNewJerseyMap';
 import SvgBlankNewYorkMap from './SvgBlankNewYorkMap';
 
 export default new Map([
   [
     'California', {
       name: 'California',
+      // https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg
       mapComponent: SvgBlankCaliforniaMap,
       counties: new Set([
         "Alameda",
@@ -176,8 +178,78 @@ export default new Map([
     }
   ],
   [
+    'New Jersey', {
+      name: 'New Jersey',
+      // https://commons.wikimedia.org/wiki/File:New_Jersey_Counties_Outline.svg
+      mapComponent: SvgBlankNewJerseyMap,
+      counties: new Set([
+        'Atlantic',
+        'Bergen',
+        'Burlington',
+        'Camden',
+        'Cape May',
+        'Cumberland',
+        'Essex',
+        'Gloucester',
+        'Hudson',
+        'Hunterdon',
+        'Mercer',
+        'Middlesex',
+        'Monmouth',
+        'Morris',
+        'Ocean',
+        'Passaic',
+        'Salem',
+        'Somerset',
+        'Sussex',
+        'Union',
+        'Warren',
+      ]),
+      // https://www.nj.gov/transportation/about/employ/regions.shtm
+      regions: new Map([
+        [
+          'North',
+          new Set([
+            'Bergen',
+            'Essex',
+            'Hudson',
+            'Morris',
+            'Passaic',
+            'Sussex',
+            'Union',
+            'Warren',
+          ]),
+        ],
+        [
+          'Central',
+          new Set([
+            'Hunterdon',
+            'Mercer',
+            'Middlesex',
+            'Monmouth',
+            'Ocean',
+            'Somerset',
+          ]),
+        ],
+        [
+          'South',
+          new Set([
+            'Atlantic',
+            'Burlington',
+            'Camden',
+            'Cape May',
+            'Cumberland',
+            'Gloucester',
+            'Salem',
+          ]),
+        ],
+      ]),
+    }
+  ],
+  [
     'New York', {
       name: 'New York',
+      // https://commons.wikimedia.org/wiki/File:Blank_Map_of_New_York_Counties.svg
       mapComponent: SvgBlankNewYorkMap,
       counties: new Set([
         'Albany',
