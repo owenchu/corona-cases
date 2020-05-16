@@ -40,6 +40,13 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from 'react-router-dom';
 
 import CountySelector from './CountySelector';
 import States from './States';
@@ -115,15 +122,15 @@ function ComposedChart(props) {
 }
 
 // https://alligator.io/js/capitalizing-strings.
-function CapitalizeCountyName(county) {
-    return county.trim().toLowerCase().replace(
+function CapitalizeCountyName(countyName) {
+    return countyName.trim().toLowerCase().replace(
         /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 }
 
-function NormalizeCountyName(state, county) {
-    switch (state) {
+function NormalizeCountyName(stateName, countyName) {
+    switch (stateName) {
       case 'Illinois':
-        switch (county) {
+        switch (countyName) {
           case 'dekalb': return 'DeKalb';
           case 'de witt': return 'DeWitt';
           case 'dupage': return 'DuPage';
@@ -138,7 +145,7 @@ function NormalizeCountyName(state, county) {
       default:
         break;
     }
-    return CapitalizeCountyName(county);
+    return CapitalizeCountyName(countyName);
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -163,26 +170,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
+function Main(props) {
+  const {state} = props;
   const [data, setData] = useState(null);
-  const [selectedState, setSelectedState] = useState(States.get('California'));
   const [period, setPeriod] = useState(60);
-  const [selectedRegions, setSelectedRegions] = useState(new Set(selectedState.regions.keys()));
-  const [selectedCounties, setSelectedCounties] = useState(selectedState.counties);
+  const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
+  const [selectedCounties, setSelectedCounties] = useState(state.counties);
   const [compact, setCompact] = useState(false);
   const [avgPeriodDays, setAvgPeriodDays] = useState(7);
+  const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${selectedState.name.toLowerCase()}?lastdays=${period}`);
+        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${state.name.toLowerCase()}?lastdays=${period}`);
         result.data.forEach((d) => {
           if (d.county.startsWith('out of') || d.county === 'unassigned') {
             return;
           }
-          const county = NormalizeCountyName(selectedState.name, d.county);
-          if (!selectedState.counties.has(county)) {
+          const county = NormalizeCountyName(state.name, d.county);
+          if (!state.counties.has(county)) {
             console.error(`Unrecognized county: ${county}`);
           }
         });
@@ -193,7 +201,7 @@ function App() {
       }
     };
     fetchData();
-  }, [selectedState, period]);
+  }, [state, period]);
 
   if (!data) {
     return <CircularProgress />;
@@ -213,12 +221,12 @@ function App() {
     const newSelectedCounties = new Set(selectedCounties);
     if (selectedRegions.has(region)) {
       newSelectedRegions.delete(region);
-      selectedState.regions.get(region).forEach((county) => {
+      state.regions.get(region).forEach((county) => {
         newSelectedCounties.delete(county);
       })
     } else {
       newSelectedRegions.add(region);
-      selectedState.regions.get(region).forEach((county) => {
+      state.regions.get(region).forEach((county) => {
         newSelectedCounties.add(county);
       })
     }
@@ -226,12 +234,12 @@ function App() {
     setSelectedCounties(newSelectedCounties);
   };
   const handleSelectionModeChange = () => {
-    setSelectedRegions(new Set(selectedState.regions.keys()));
-    setSelectedCounties(selectedState.counties);
+    setSelectedRegions(new Set(state.regions.keys()));
+    setSelectedCounties(state.counties);
   };
   const handleSelectAll = () => {
-    setSelectedRegions(new Set(selectedState.regions.keys()));
-    setSelectedCounties(selectedState.counties);
+    setSelectedRegions(new Set(state.regions.keys()));
+    setSelectedCounties(state.counties);
   };
   const handleClearAll = () => {
     setSelectedRegions(new Set());
@@ -255,7 +263,7 @@ function App() {
 
   data.forEach((d) => {
     // Normalize county names: https://alligator.io/js/capitalizing-strings.
-    const county = NormalizeCountyName(selectedState.name, d.county);
+    const county = NormalizeCountyName(state.name, d.county);
 
     if (!selectedCounties.has(county)) {
       return;
@@ -319,12 +327,10 @@ function App() {
                 <Select
                   id='state-select'
                   labelId='state-select-label'
-                  value={selectedState.name}
+                  value={state.name}
                   onChange={(e) => {
-                    const state = States.get(e.target.value);
-                    setSelectedState(state);
-                    setSelectedRegions(new Set(state.regions.keys()));
-                    setSelectedCounties(state.counties)
+                    const stateName = e.target.value;
+                    history.push(`/${States.get(stateName).postalCode}`)
                   }} >
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -346,7 +352,7 @@ function App() {
             </Grid>
             <Grid item xs={12}>
               <CountySelector
-                state={selectedState}
+                state={state}
                 selectedCounties={selectedCounties}
                 onCountyToggle={handleCountyToggle}
                 selectedRegions={selectedRegions}
@@ -425,6 +431,27 @@ function App() {
       </main>
     </>
   );
+}
+
+function App() {
+  const routes = Array.from(States.keys()).map((stateName) => {
+    const state = States.get(stateName);
+    return (
+      <Route key={stateName} path={`/${state.postalCode}`}>
+        <Main state={state} />
+      </Route>
+    );
+  });
+  return (
+    <Router>
+      <Switch>
+        {routes}
+        <Route path='*'>
+          <Redirect to='/CA' />
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
 
 export default App;

@@ -7,6 +7,7 @@ export default new Map([
   [
     'California', {
       name: 'California',
+      postalCode: 'CA',
       // https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg
       mapComponent: SvgBlankCaliforniaMap,
       counties: new Set([
@@ -181,6 +182,7 @@ export default new Map([
   [
     'Illinois', {
       name: 'Illinois',
+      postalCode: 'IL',
       // https://commons.wikimedia.org/wiki/File:Map_of_Illinois_counties.svg
       mapComponent: SvgBlankIllinoisMap,
       counties: new Set([
@@ -417,6 +419,7 @@ export default new Map([
   [
     'New Jersey', {
       name: 'New Jersey',
+      postalCode: 'NJ',
       // https://commons.wikimedia.org/wiki/File:New_Jersey_Counties_Outline.svg
       mapComponent: SvgBlankNewJerseyMap,
       counties: new Set([
@@ -486,6 +489,7 @@ export default new Map([
   [
     'New York', {
       name: 'New York',
+      postalCode: 'NY',
       // https://commons.wikimedia.org/wiki/File:Blank_Map_of_New_York_Counties.svg
       mapComponent: SvgBlankNewYorkMap,
       counties: new Set([
