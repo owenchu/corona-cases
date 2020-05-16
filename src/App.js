@@ -149,6 +149,7 @@ const useStyles = makeStyles((theme) => ({
   },
   stateSelectionFormControl: {
     minWidth: 200,
+    marginRight: theme.spacing(2),
   },
   chartControl: {
     marginLeft: theme.spacing(0.5),
@@ -163,10 +164,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const numDays = 60;
-
   const [data, setData] = useState(null);
   const [selectedState, setSelectedState] = useState(States.get('California'));
+  const [period, setPeriod] = useState(60);
   const [selectedRegions, setSelectedRegions] = useState(new Set(selectedState.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(selectedState.counties);
   const [compact, setCompact] = useState(false);
@@ -176,7 +176,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${selectedState.name.toLowerCase()}?lastdays=${numDays}`);
+        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${selectedState.name.toLowerCase()}?lastdays=${period}`);
         result.data.forEach((d) => {
           if (d.county.startsWith('out of') || d.county === 'unassigned') {
             return;
@@ -193,7 +193,7 @@ function App() {
       }
     };
     fetchData();
-  }, [selectedState]);
+  }, [selectedState, period]);
 
   if (!data) {
     return <CircularProgress />;
@@ -239,7 +239,7 @@ function App() {
   };
 
   const chartData = [];
-  for (var i = numDays - 1; i >= 0; --i) {
+  for (var i = period - 1; i >= 0; --i) {
     chartData.push({
       date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
       cases: 0,
@@ -261,13 +261,13 @@ function App() {
       return;
     }
     for (const date in d.timeline.cases) {
-      const offset = numDays - today.diff(dayjs(date), 'day') - 1;
+      const offset = period - today.diff(dayjs(date), 'day') - 1;
       if (offset >= 0) {
         chartData[offset].cases += d.timeline.cases[date];
       }
     }
     for (const date in d.timeline.deaths) {
-      const offset = numDays - today.diff(dayjs(date), 'day') - 1;
+      const offset = period - today.diff(dayjs(date), 'day') - 1;
       if (offset >= 0) {
         chartData[offset].deaths += d.timeline.deaths[date];
       }
@@ -329,6 +329,18 @@ function App() {
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
                   )}
+                </Select>
+              </FormControl>
+              <FormControl>
+                <InputLabel id='period-select-label'>Period</InputLabel>
+                <Select
+                  id='period-select'
+                  labelId='Period-select-label'
+                  value={period}
+                  onChange={(e) => setPeriod(e.target.value)} >
+                  <MenuItem value={30}>Last 30 days</MenuItem>
+                  <MenuItem value={60}>Last 60 days</MenuItem>
+                  <MenuItem value={90}>Last 90 days</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
