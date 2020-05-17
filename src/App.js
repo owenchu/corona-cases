@@ -1,4 +1,3 @@
-import axios from 'axios';
 import dayjs from 'dayjs';
 import {
   AppBar,
@@ -24,10 +23,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@material-ui/lab';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, {useState} from 'react';
 import {
   Bar,
   Line,
@@ -49,6 +45,8 @@ import {
 } from 'react-router-dom';
 
 import CountySelector from './CountySelector';
+import {useData} from './Data';
+import {NormalizeCountyName} from './Utils';
 import States from './States';
 
 function Chart(props) {
@@ -121,33 +119,6 @@ function ComposedChart(props) {
   );
 }
 
-// https://alligator.io/js/capitalizing-strings.
-function CapitalizeCountyName(countyName) {
-    return countyName.trim().toLowerCase().replace(
-        /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-}
-
-function NormalizeCountyName(stateName, countyName) {
-    switch (stateName) {
-      case 'Illinois':
-        switch (countyName) {
-          case 'dekalb': return 'DeKalb';
-          case 'de witt': return 'DeWitt';
-          case 'dupage': return 'DuPage';
-          case 'lasalle': return 'LaSalle';
-          case 'mcdonough': return 'McDonough';
-          case 'mchenry': return 'McHenry';
-          case 'mclean': return 'McLean';
-          default:
-            break;
-        }
-        break;
-      default:
-        break;
-    }
-    return CapitalizeCountyName(countyName);
-}
-
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
   container: {
@@ -172,36 +143,14 @@ const useStyles = makeStyles((theme) => ({
 
 function Main(props) {
   const {state} = props;
-  const [data, setData] = useState(null);
   const [period, setPeriod] = useState(60);
+  const data = useData(state, period);
   const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(state.counties);
   const [compact, setCompact] = useState(false);
   const [avgPeriodDays, setAvgPeriodDays] = useState(7);
   const history = useHistory();
   const classes = useStyles();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${state.name.toLowerCase()}?lastdays=${period}`);
-        result.data.forEach((d) => {
-          if (d.county.startsWith('out of') || d.county === 'unassigned') {
-            return;
-          }
-          const county = NormalizeCountyName(state.name, d.county);
-          if (!state.counties.has(county)) {
-            console.error(`Unrecognized county: ${county}`);
-          }
-        });
-        setData(result.data);
-      } catch (error) {
-        console.log(error);
-        setData(null);
-      }
-    };
-    fetchData();
-  }, [state, period]);
 
   if (!data) {
     return <CircularProgress />;
@@ -295,7 +244,7 @@ function Main(props) {
     arr[i].newCases = arr[i].cases - arr[i - 1].cases;
     arr[i].newDeaths = arr[i].deaths - arr[i - 1].deaths;
 
-    // Compute 7-day averages.
+    // Compute N-day averages.
     var newCases = 0;
     var newDeaths = 0;
     var days = 0;
