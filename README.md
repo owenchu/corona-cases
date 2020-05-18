@@ -1,68 +1,35 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# corona-cases
 
-## Available Scripts
+https://vis.pandemic.events
 
-In the project directory, you can run:
+This project provides a simple visualization for the coronavirus pandemic. The idea is to allow the user to see up-to-date stats aggregated by selected regions or counties within a state, so it's easier for the user to **understand the corona situation in the context that's most relevant to their daily lives**.
 
-### `yarn start`
+## Quick start
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). To launch the project in development mode, run:
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```sh
+yarn run start
+```
 
-### `yarn test`
+## Adding a new state
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+See [this commit](https://github.com/owenchu/corona-cases/commit/3e9d1ce051d89bacb99a40a351e4f0b7729f4643) for an example.
 
-### `yarn build`
+Adding a new state requires some manual work:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Add a new state entry to [src/States.js](https://github.com/owenchu/corona-cases/blob/master/src/States.js)
+2. Download the state's county map from [Wikimedia Commons](https://commons.wikimedia.org/) ([example](https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg))
+3. Convert the county map into a React component: `npx @svgr/cli [STATE_COUNTY_MAP].svg src/SvgBlank[State]Map.js`
+4. Edit the generated component (YMMV)
+  * Rename the component so its name is consistent with other map components
+  * Prefix state IDs with the state's postal code (e.g., `id="Atlantic"` -> `id="NJ_Atlantic"`)
+  * Add missing state IDs (if any is missing)
+  * Set the SVG's default fill color to `#CCC`
+  * Set the SVG's default stroke color to `#FFF`
+  * Set the SVG's viewBox so it's fully visible on the page
+  * Edit the code to let the component reflect selection status for its counties ([example](https://github.com/owenchu/corona-cases/commit/3e9d1ce051d89bacb99a40a351e4f0b7729f4643))
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## License
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+GPL licensed. See the LICENSE file for details.
