@@ -4,7 +4,7 @@ https://vis.pandemic.events
 
 ![Screenshot](https://vis.pandemic.events/screenshot.png)
 
-This project provides a simple visualization for the coronavirus pandemic. The idea is to allow the user to see up-to-date stats aggregated by selected regions or counties within a state, so it's easier for the user to **understand the corona situation in the context that's most relevant to their daily lives**.
+This project provides a simple visualization for the coronavirus pandemic. The idea is to allow the user to see up-to-date stats aggregated by selected regions or counties within a state, **so the user can stay informed on the corona situation in the context that's most relevant to their daily lives**.
 
 ## Quick start
 
