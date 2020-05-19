@@ -17,10 +17,7 @@ function SvgBlankNewJerseyMap(props) {
   };
   const classes = useStyles();
   return (
-    <svg
-      viewBox="-8038 -13966 14262 26999"
-      width='70%'
-    >
+    <svg viewBox="-8038 -13966 14262 26999" width="75%">
       <g
         className={classes.svgGroup}
         strokeWidth={22}

@@ -17,10 +17,7 @@ function SvgBlankIllinoisMap(props) {
   };
   const classes = useStyles();
   return (
-    <svg
-      viewBox="-18279 -26465 34534 61566"
-      width='70%'
-    >
+    <svg viewBox="-18279 -26465 34534 61566" width="75%">
       <g
         className={classes.svgGroup}
         fill="#CCC"

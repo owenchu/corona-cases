@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Checkbox,
   Chip,
@@ -77,61 +76,55 @@ function CountySelector(props) {
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Grid container wrap='nowrap' spacing={2}>
-            <Grid item xs={5}>
-              <Box mb={1}>
-                <FormControlLabel
-                  className={classes.regionModeControl}
-                  control={
-                    <Checkbox
-                      color='default'
-                      checked={regionMode}
-                      onChange={handleModeChange} />
-                  }
-                  label={
-                    <Typography variant='button'>
-                      Region Mode
-                    </Typography>
-                  } />
-                <Button
-                  onClick={handleSelectAll}>
-                  Select all
-                </Button>
-                <Button
-                  onClick={handleClearAll}>
-                  Clear all
-                </Button>
-              </Box>
-              <Box mb={2}>
-                {regionMode ? (
-                  Array.from(state.regions.keys()).map((r) => (
-                    <Chip
-                      className={classes.chip}
-                      key={r}
-                      label={r}
-                      clickable
-                      color={selectedRegions.has(r) ? 'primary' : 'default'}
-                      onClick={handleRegionClick.bind(this, r)} />
-                  ))
-                ) : (
-                  Array.from(state.counties).map((c) => (
-                    <Chip
-                      className={classes.chip}
-                      key={c}
-                      label={c}
-                      clickable
-                      color={selectedCounties.has(c) ? 'primary' : 'default'}
-                      onClick={handleToggleCounty.bind(this, c)} />
-                  ))
-                )}
-              </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControlLabel
+                className={classes.regionModeControl}
+                control={
+                  <Checkbox
+                    color='default'
+                    checked={regionMode}
+                    onChange={handleModeChange} />
+                }
+                label={
+                  <Typography variant='button'>
+                    Region Mode
+                  </Typography>
+                } />
+              <Button onClick={handleSelectAll}>
+                Select all
+              </Button>
+              <Button onClick={handleClearAll}>
+                Clear all
+              </Button>
             </Grid>
-            <Grid item container alignItems='center' xs={7}>
-              <Grid item xs={12}>
-                <Map
-                  selectedCounties={selectedCounties}
-                  onToggleCounty={handleToggleCounty} />
-              </Grid>
+            <Grid item xs={6}>
+              {regionMode ? (
+                Array.from(state.regions.keys()).map((r) => (
+                  <Chip
+                    className={classes.chip}
+                    key={r}
+                    label={r}
+                    clickable
+                    color={selectedRegions.has(r) ? 'primary' : 'default'}
+                    onClick={handleRegionClick.bind(this, r)} />
+                ))
+              ) : (
+                Array.from(state.counties).map((c) => (
+                  <Chip
+                    className={classes.chip}
+                    key={c}
+                    label={c}
+                    clickable
+                    color={selectedCounties.has(c) ? 'primary' : 'default'}
+                    onClick={handleToggleCounty.bind(this, c)} />
+                ))
+              )}
+            </Grid>
+            <Grid item container justify='center' alignItems='flex-start' xs={6}>
+              <Map
+                selectedCounties={selectedCounties}
+                onToggleCounty={handleToggleCounty} />
             </Grid>
           </Grid>
         </ExpansionPanelDetails>
