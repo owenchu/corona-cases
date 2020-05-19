@@ -22,7 +22,7 @@ Adding a new state requires some manual work:
 
 1. Add a new state entry to [src/States.js](https://github.com/owenchu/corona-cases/blob/master/src/States.js)
 2. Download the state's county map from [Wikimedia Commons](https://commons.wikimedia.org/) ([example](https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg))
-3. Convert the county map into a React component: `npx @svgr/cli [STATE_COUNTY_MAP].svg src/SvgBlank[State]Map.js`
+3. Convert the county map into a React component: `npx @svgr/cli maps/[StateCountyMap].svg > src/SvgBlank[State]Map.js`
 4. Edit the generated component (YMMV)
   * Rename the component so its name is consistent with other map components
   * Prefix state IDs with the state's postal code (e.g., `id="Atlantic"` -> `id="NJ_Atlantic"`)

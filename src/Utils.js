@@ -19,6 +19,13 @@ function NormalizeCountyName(stateName, countyName) {
             break;
         }
         break;
+      case 'Massachusetts':
+        switch (countyName) {
+          case 'dukes and nantucket': return 'Dukes';
+          default:
+            break;
+        }
+        break;
       default:
         break;
     }

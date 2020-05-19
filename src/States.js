@@ -1,5 +1,6 @@
 import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
 import SvgBlankIllinoisMap from './SvgBlankIllinoisMap';
+import SvgBlankMassachusettsMap from './SvgBlankMassachusettsMap';
 import SvgBlankNewJerseyMap from './SvgBlankNewJerseyMap';
 import SvgBlankNewYorkMap from './SvgBlankNewYorkMap';
 
@@ -414,6 +415,92 @@ export default new Map([
           ]),
         ],
       ]),
+    }
+  ],
+  [
+    'Massachusetts', {
+      name: 'Massachusetts',
+      postalCode: 'MA',
+      // https://commons.wikimedia.org/wiki/File:Map_of_Massachusetts_highlighting_Suffolk_County.svg
+      mapComponent: SvgBlankMassachusettsMap,
+      counties: new Set([
+        'Barnstable',
+        'Berkshire',
+        'Bristol',
+        'Dukes',
+        'Essex',
+        'Franklin',
+        'Hampden',
+        'Hampshire',
+        'Middlesex',
+        'Nantucket',
+        'Norfolk',
+        'Plymouth',
+        'Suffolk',
+        'Worcester',
+      ]),
+      // These regions are an approximation of
+      // https://matracking.ehs.state.ma.us/eohhs_regions/eohhs_regions.html.
+      regions: new Map([
+        [
+          'Boston',
+          new Set([
+            'Suffolk',
+          ]),
+        ],
+        [
+          'Central',
+          new Set([
+            'Worcester',
+          ]),
+        ],
+        [
+          'Metro West',
+          new Set([
+            'Middlesex',
+            'Norfolk',
+          ]),
+        ],
+        [
+          'Northeast',
+          new Set([
+            'Essex',
+          ]),
+        ],
+        [
+          'Southeast',
+          new Set([
+            'Plymouth',
+            'Bristol',
+            'Barnstable',
+            'Dukes',
+            'Nantucket',
+          ]),
+        ],
+        [
+          'Western',
+          new Set([
+            'Berkshire',
+            'Franklin',
+            'Hampshire',
+            'Hampden',
+          ]),
+        ],
+      ]),
+      notes: new Map([
+        [
+          'counties',
+          new Set([
+            'Cases in Dukes County and Nantucket County are added together and reported under Dukes county.',
+          ]),
+        ],
+        [
+          'regions',
+          new Set([
+            'The regions are an approximation of the EOHHS regions (https://matracking.ehs.state.ma.us/eohhs_regions/eohhs_regions.html), where each region consists of individual communities instead of counties.',
+          ]),
+        ],
+      ])
     }
   ],
   [

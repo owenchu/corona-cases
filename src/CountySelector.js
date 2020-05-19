@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Checkbox,
   Chip,
@@ -99,27 +100,42 @@ function CountySelector(props) {
               </Button>
             </Grid>
             <Grid item xs={6}>
-              {regionMode ? (
-                Array.from(state.regions.keys()).map((r) => (
-                  <Chip
-                    className={classes.chip}
-                    key={r}
-                    label={r}
-                    clickable
-                    color={selectedRegions.has(r) ? 'primary' : 'default'}
-                    onClick={handleRegionClick.bind(this, r)} />
-                ))
-              ) : (
-                Array.from(state.counties).map((c) => (
-                  <Chip
-                    className={classes.chip}
-                    key={c}
-                    label={c}
-                    clickable
-                    color={selectedCounties.has(c) ? 'primary' : 'default'}
-                    onClick={handleToggleCounty.bind(this, c)} />
-                ))
-              )}
+              <Box>
+                {regionMode ? (
+                  Array.from(state.regions.keys()).map((r) => (
+                    <Chip
+                      className={classes.chip}
+                      key={r}
+                      label={r}
+                      clickable
+                      color={selectedRegions.has(r) ? 'primary' : 'default'}
+                      onClick={handleRegionClick.bind(this, r)} />
+                  ))
+                ) : (
+                  Array.from(state.counties).map((c) => (
+                    <Chip
+                      className={classes.chip}
+                      key={c}
+                      label={c}
+                      clickable
+                      color={selectedCounties.has(c) ? 'primary' : 'default'}
+                      onClick={handleToggleCounty.bind(this, c)} />
+                  ))
+                )}
+              </Box>
+              <Box mt={4} ml={1}>
+                {state.notes
+                && state.notes.has(regionMode ? 'regions' : 'counties')
+                && Array.from(state.notes.get(regionMode ? 'regions' : 'counties')).map((n, i) => (
+                  <Typography
+                    key={i}
+                    display='block'
+                    variant='caption'
+                    color='textSecondary'>
+                    * {n}
+                  </Typography>
+                ))}
+              </Box>
             </Grid>
             <Grid item container justify='center' alignItems='flex-start' xs={6}>
               <Map
