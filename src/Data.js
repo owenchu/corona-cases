@@ -13,7 +13,7 @@ function useData(state, period) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const key = `${state.name}_${period}`;
+    const key = `${state.postalCode}_${period}`;
     const fetchData = async () => {
       try {
         if (cachedDataMap.has(key)) {
