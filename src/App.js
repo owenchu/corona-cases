@@ -120,6 +120,9 @@ function ComposedChart(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  logo: {
+    flexGrow: 1,
+  },
   appBarSpacer: theme.mixins.toolbar,
   container: {
     width: 960,
@@ -261,7 +264,7 @@ function Main(props) {
     <>
       <AppBar elevation={0}>
         <Toolbar>
-          <Typography component='h1' variant='h5'>
+          <Typography className={classes.logo} component='h1' variant='h5'>
             Corona Cases
           </Typography>
         </Toolbar>
@@ -369,10 +372,13 @@ function Main(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography>
-                Data source: <Link href='https://github.com/NovelCOVID/API'><b>NovelCOVID/API</b></Link>
+                GitHub repo: <Link href='https://github.com/owenchu/corona-cases'>owenchu/corona-cases</Link>
               </Typography>
               <Typography>
-                Maps: <Link href='https://commons.wikimedia.org/wiki/Main_Page'><b>Wikimedia Commons</b></Link>
+                Data source: <Link href='https://github.com/NovelCOVID/API'>NovelCOVID/API</Link>
+              </Typography>
+              <Typography>
+                Maps: <Link href='https://commons.wikimedia.org/wiki/Main_Page'>Wikimedia Commons</Link>
               </Typography>
             </Grid>
           </Grid>
