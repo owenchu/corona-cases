@@ -24,13 +24,13 @@ Adding a new state requires some manual work:
 2. Download the state's county map from [Wikimedia Commons](https://commons.wikimedia.org/) ([example](https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg))
 3. Convert the county map into a React component: `npx @svgr/cli maps/[StateCountyMap].svg > src/SvgBlank[State]Map.js`
 4. Edit the generated component (YMMV)
-  * Rename the component so its name is consistent with other map components
-  * Prefix state IDs with the state's postal code (e.g., `id="Atlantic"` -> `id="NJ_Atlantic"`)
-  * Add missing state IDs (if any is missing)
-  * Set the SVG's default fill color to `#CCC`
-  * Set the SVG's default stroke color to `#FFF`
-  * Set the SVG's viewBox so it's fully visible on the page
-  * Edit the code to let the component reflect selection status for its counties ([example](https://github.com/owenchu/corona-cases/commit/3e9d1ce051d89bacb99a40a351e4f0b7729f4643))
+    * Rename the component so its name is consistent with other map components
+    * Prefix state IDs with the state's postal code (e.g., `id="Atlantic"` -> `id="NJ_Atlantic"`)
+    * Add missing state IDs (if any is missing)
+    * Set the SVG's default fill color to `#CCC`
+    * Set the SVG's default stroke color to `#FFF`
+    * Set the SVG's viewBox so it's fully visible on the page
+    * Edit the code to let the component reflect selection status for its counties ([example](https://github.com/owenchu/corona-cases/commit/3e9d1ce051d89bacb99a40a351e4f0b7729f4643))
 
 ## License
 
