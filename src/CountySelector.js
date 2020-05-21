@@ -1,13 +1,14 @@
 import {
   Box,
   Button,
-  Checkbox,
   Chip,
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   FormControlLabel,
   Grid,
+  MenuItem,
+  Select,
   Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
@@ -18,8 +19,14 @@ const useStyles = makeStyles((theme) => ({
   countySelectionPanelSummary: {
     width: 800,
   },
-  regionModeControl: {
-    marginLeft: theme.spacing(0),
+  modeControl: {
+    marginRight: theme.spacing(2),
+  },
+  modeControlSelect: {
+    width: 90,
+  },
+  modeControlLabel: {
+    marginRight: theme.spacing(1),
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -40,8 +47,8 @@ function CountySelector(props) {
   const [regionMode, setRegionMode] = useState(true);
   const classes = useStyles();
 
-  const handleModeChange = () => {
-    setRegionMode(!regionMode);
+  const handleModeChange = (e) => {
+    setRegionMode(e.target.value);
     onSelectionModeChange();
   }
   const handleSelectAll = () => {
@@ -80,18 +87,23 @@ function CountySelector(props) {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControlLabel
-                className={classes.regionModeControl}
+                className={classes.modeControl}
                 control={
-                  <Checkbox
-                    color='default'
-                    checked={regionMode}
-                    onChange={handleModeChange} />
+                  <Select
+                    className={classes.modeControlSelect}
+                    value={regionMode}
+                    onChange={handleModeChange}>
+                    <MenuItem value={true}>REGION</MenuItem>
+                    <MenuItem value={false}>COUNTY</MenuItem>
+                  </Select>
                 }
                 label={
-                  <Typography variant='button'>
-                    Region Mode
+                  <Typography className={classes.modeControlLabel} variant='button'>
+                    SELECT BY
                   </Typography>
-                } />
+                }
+                labelPlacement='start'>
+              </FormControlLabel>
               <Button onClick={handleSelectAll}>
                 Select all
               </Button>

@@ -282,7 +282,7 @@ function Main(props) {
                   onChange={(e) => {
                     const stateName = e.target.value;
                     history.push(`/${States.get(stateName).postalCode}`)
-                  }} >
+                  }}>
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
                   )}
