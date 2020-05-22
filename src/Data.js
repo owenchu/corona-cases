@@ -4,7 +4,7 @@ import {
   useState,
 } from 'react';
 
-import {NormalizeCountyName} from './Utils';
+import {normalizeCountyName} from './Utils';
 
 // May need to use an LRU cache if more states are supported.
 const cachedDataMap = new Map();
@@ -26,7 +26,7 @@ function useData(state, period) {
           if (d.county.startsWith('out of') || d.county === 'unassigned') {
             return;
           }
-          const county = NormalizeCountyName(state.name, d.county);
+          const county = normalizeCountyName(state.name, d.county);
           if (!state.counties.has(county)) {
             console.error(`Unrecognized county: ${county}`);
           }

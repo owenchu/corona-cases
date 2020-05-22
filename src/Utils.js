@@ -24,7 +24,7 @@ const REGION_MODE_COLORS = [
 const DEFAULT_SELECTED_COUNTY_COLOR = '#f0cf85';
 const DEFAULT_UNSELECTED_COUNTY_COLOR = '#cccccc';
 
-function GetCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
+function getCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
   if (!selectedCounties.has(countyToFill)) {
     return DEFAULT_UNSELECTED_COUNTY_COLOR;
   }
@@ -54,7 +54,7 @@ function useMap(mapProps) {
   const {state, regionMode, selectedCounties, onToggleCounty} = mapProps;
   return {
     svgElementProps: (county) => ({
-      fill: GetCountyFillColor(state, regionMode, selectedCounties, county),
+      fill: getCountyFillColor(state, regionMode, selectedCounties, county),
       onClick: () => onToggleCounty(county),
     }),
     unselectedCountyColor: DEFAULT_UNSELECTED_COUNTY_COLOR,
@@ -62,12 +62,12 @@ function useMap(mapProps) {
 }
 
 // https://alligator.io/js/capitalizing-strings.
-function CapitalizeCountyName(countyName) {
+function capitalizeCountyName(countyName) {
     return countyName.trim().toLowerCase().replace(
         /\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 }
 
-function NormalizeCountyName(stateName, countyName) {
+function normalizeCountyName(stateName, countyName) {
     switch (stateName) {
       case 'Illinois':
         switch (countyName) {
@@ -92,10 +92,10 @@ function NormalizeCountyName(stateName, countyName) {
       default:
         break;
     }
-    return CapitalizeCountyName(countyName);
+    return capitalizeCountyName(countyName);
 }
 
 export {
-  NormalizeCountyName,
+  normalizeCountyName,
   useMap,
 };

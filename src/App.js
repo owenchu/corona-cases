@@ -45,7 +45,7 @@ import {
 
 import CountySelector from './CountySelector';
 import {useData} from './Data';
-import {NormalizeCountyName} from './Utils';
+import {normalizeCountyName} from './Utils';
 import States from './States';
 
 function Chart(props) {
@@ -214,7 +214,7 @@ function Main(props) {
 
   data.forEach((d) => {
     // Normalize county names: https://alligator.io/js/capitalizing-strings.
-    const county = NormalizeCountyName(state.name, d.county);
+    const county = normalizeCountyName(state.name, d.county);
 
     if (!selectedCounties.has(county)) {
       return;
