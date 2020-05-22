@@ -147,6 +147,7 @@ function Main(props) {
   const {state} = props;
   const [period, setPeriod] = useState(60);
   const data = useData(state, period);
+  const [regionMode, setRegionMode] = useState(true);
   const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(state.counties);
   const [compact, setCompact] = useState(false);
@@ -158,6 +159,11 @@ function Main(props) {
     return <CircularProgress />;
   }
 
+  const handleModeToggle = () => {
+    setRegionMode(!regionMode);
+    setSelectedRegions(new Set(state.regions.keys()));
+    setSelectedCounties(state.counties);
+  };
   const handleCountyToggle = (county) => {
     const newSelectedCounties = new Set(selectedCounties);
     if (selectedCounties.has(county)) {
@@ -183,10 +189,6 @@ function Main(props) {
     }
     setSelectedRegions(newSelectedRegions);
     setSelectedCounties(newSelectedCounties);
-  };
-  const handleSelectionModeChange = () => {
-    setSelectedRegions(new Set(state.regions.keys()));
-    setSelectedCounties(state.counties);
   };
   const handleSelectAll = () => {
     setSelectedRegions(new Set(state.regions.keys()));
@@ -304,11 +306,12 @@ function Main(props) {
             <Grid item xs={12}>
               <CountySelector
                 state={state}
+                regionMode={regionMode}
+                onModeToggle={handleModeToggle}
                 selectedCounties={selectedCounties}
                 onCountyToggle={handleCountyToggle}
                 selectedRegions={selectedRegions}
                 onRegionToggle={handleRegionToggle}
-                onSelectionModeChange={handleSelectionModeChange}
                 onSelectAll={handleSelectAll}
                 onClearAll={handleClearAll} />
             </Grid>

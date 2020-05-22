@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
+import React from 'react';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,20 +36,19 @@ const useStyles = makeStyles((theme) => ({
 function CountySelector(props) {
   const {
     state,
+    regionMode,
+    onModeToggle,
     selectedCounties,
     onCountyToggle,
     selectedRegions,
     onRegionToggle,
-    onSelectionModeChange,
     onSelectAll,
     onClearAll,
   } = props;
-  const [regionMode, setRegionMode] = useState(true);
   const classes = useStyles();
 
-  const handleModeChange = (e) => {
-    setRegionMode(e.target.value);
-    onSelectionModeChange();
+  const handleModeChange = () => {
+    onModeToggle();
   }
   const handleSelectAll = () => {
     onSelectAll();
