@@ -20,9 +20,10 @@ const REGION_MODE_COLORS = [
   '#5c2a9d',
   '#562349',
 ];
+const NUM_REGION_MODE_COLORS = REGION_MODE_COLORS.length;
 
 const DEFAULT_SELECTED_COUNTY_COLOR = '#f0cf85';
-const DEFAULT_UNSELECTED_COUNTY_COLOR = '#cccccc';
+const DEFAULT_UNSELECTED_COUNTY_COLOR = '#e0e0e0';
 
 function getCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
   if (!selectedCounties.has(countyToFill)) {
@@ -36,10 +37,9 @@ function getCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
   let colorIndex = 0;
   for (const counties of state.regions.values()) {
     if (counties.has(countyToFill)) {
-      const numColors = REGION_MODE_COLORS.length;
-      if (colorIndex >= numColors) {
+      if (colorIndex >= NUM_REGION_MODE_COLORS) {
         console.error('Not enough distinct colors to draw regions');
-        colorIndex = colorIndex % numColors;
+        colorIndex = colorIndex % NUM_REGION_MODE_COLORS;
       }
       return REGION_MODE_COLORS[colorIndex];
     }
