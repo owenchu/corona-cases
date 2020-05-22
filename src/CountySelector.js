@@ -38,10 +38,10 @@ function CountySelector(props) {
     state,
     regionMode,
     onModeToggle,
-    selectedCounties,
-    onCountyToggle,
     selectedRegions,
     onRegionToggle,
+    selectedCounties,
+    onCountyToggle,
     onSelectAll,
     onClearAll,
   } = props;
@@ -50,11 +50,8 @@ function CountySelector(props) {
   const handleModeChange = () => {
     onModeToggle();
   }
-  const handleSelectAll = () => {
-    onSelectAll();
-  };
-  const handleClearAll = () => {
-    onClearAll();
+  const handleRegionClick = (region) => {
+    onRegionToggle(region);
   };
   const handleToggleCounty = (county) => {
     if (regionMode) {
@@ -68,8 +65,11 @@ function CountySelector(props) {
       onCountyToggle(county);
     }
   };
-  const handleRegionClick = (region) => {
-    onRegionToggle(region);
+  const handleSelectAll = () => {
+    onSelectAll();
+  };
+  const handleClearAll = () => {
+    onClearAll();
   };
 
   const Map = state.mapComponent;

@@ -164,15 +164,6 @@ function Main(props) {
     setSelectedRegions(new Set(state.regions.keys()));
     setSelectedCounties(state.counties);
   };
-  const handleCountyToggle = (county) => {
-    const newSelectedCounties = new Set(selectedCounties);
-    if (selectedCounties.has(county)) {
-      newSelectedCounties.delete(county);
-    } else {
-      newSelectedCounties.add(county);
-    }
-    setSelectedCounties(newSelectedCounties);
-  };
   const handleRegionToggle = (region) => {
     const newSelectedRegions = new Set(selectedRegions);
     const newSelectedCounties = new Set(selectedCounties);
@@ -188,6 +179,15 @@ function Main(props) {
       })
     }
     setSelectedRegions(newSelectedRegions);
+    setSelectedCounties(newSelectedCounties);
+  };
+  const handleCountyToggle = (county) => {
+    const newSelectedCounties = new Set(selectedCounties);
+    if (selectedCounties.has(county)) {
+      newSelectedCounties.delete(county);
+    } else {
+      newSelectedCounties.add(county);
+    }
     setSelectedCounties(newSelectedCounties);
   };
   const handleSelectAll = () => {
@@ -308,10 +308,10 @@ function Main(props) {
                 state={state}
                 regionMode={regionMode}
                 onModeToggle={handleModeToggle}
-                selectedCounties={selectedCounties}
-                onCountyToggle={handleCountyToggle}
                 selectedRegions={selectedRegions}
                 onRegionToggle={handleRegionToggle}
+                selectedCounties={selectedCounties}
+                onCountyToggle={handleCountyToggle}
                 onSelectAll={handleSelectAll}
                 onClearAll={handleClearAll} />
             </Grid>
