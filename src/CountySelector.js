@@ -151,6 +151,8 @@ function CountySelector(props) {
             </Grid>
             <Grid item container justify='center' alignItems='flex-start' xs={6}>
               <Map
+                state={state}
+                regionMode={regionMode}
                 selectedCounties={selectedCounties}
                 onToggleCounty={handleToggleCounty} />
             </Grid>

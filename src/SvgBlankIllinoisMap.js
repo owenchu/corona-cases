@@ -1,6 +1,8 @@
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 
+import {useMap} from './Utils';
+
 const useStyles = makeStyles((theme) => ({
   svgGroup: {
     cursor: 'pointer',
@@ -8,19 +10,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SvgBlankIllinoisMap(props) {
-  const {selectedCounties, onToggleCounty} = props;
-  const svgElementProps = (county) => {
-    return {
-      fill: selectedCounties.has(county) ? '#f0cf85' : '#cccccc',
-      onClick: () => onToggleCounty(county),
-    };
-  };
+  const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
     <svg viewBox='-18279 -26465 34534 61566' width='75%'>
       <g
         className={classes.svgGroup}
-        fill='#CCC'
+        fill={unselectedCountyColor}
         stroke='#FFF'
         strokeLinejoin='round'
         strokeWidth={55}
