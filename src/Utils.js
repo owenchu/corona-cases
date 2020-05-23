@@ -81,6 +81,13 @@ function normalizeCountyName(stateName, countyName) {
             break;
         }
         break;
+      case 'Pennsylvania':
+        switch (countyName) {
+          case 'mckean': return 'McKean';
+          default:
+            break;
+        }
+        break;
       default:
         break;
     }
