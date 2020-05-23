@@ -79,6 +79,15 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Michigan':
+        switch (countyName) {
+          case 'federal correctional institution (fci)':
+            return 'Federal Correctional Institution (FCI)';
+          case 'michigan department of corrections (mdoc)':
+            return 'Michigan Department of Corrections (MDOC)';
+          default: break;
+        }
+        break;
       case 'Pennsylvania':
         switch (countyName) {
           case 'mckean': return 'McKean';
