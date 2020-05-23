@@ -3,7 +3,7 @@ import SvgBlankIllinoisMap from './SvgBlankIllinoisMap';
 import SvgBlankMassachusettsMap from './SvgBlankMassachusettsMap';
 import SvgBlankNewJerseyMap from './SvgBlankNewJerseyMap';
 import SvgBlankNewYorkMap from './SvgBlankNewYorkMap';
-import SvgBlankPennsylvaniaMap from './SvgBlankPennsylvania';
+import SvgBlankPennsylvaniaMap from './SvgBlankPennsylvaniaMap';
 
 export default new Map([
   [
