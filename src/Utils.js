@@ -70,22 +70,28 @@ function normalizeCountyName(stateName, countyName) {
           case 'mcdonough': return 'McDonough';
           case 'mchenry': return 'McHenry';
           case 'mclean': return 'McLean';
-          default:
-            break;
+          default: break;
         }
         break;
       case 'Massachusetts':
         switch (countyName) {
           case 'dukes and nantucket': return 'Dukes';
-          default:
-            break;
+          default: break;
         }
         break;
       case 'Pennsylvania':
         switch (countyName) {
           case 'mckean': return 'McKean';
-          default:
-            break;
+          default: break;
+        }
+        break;
+      case 'Texas':
+        switch (countyName) {
+          case 'dewitt': return 'DeWitt';
+          case 'mcculloch': return 'McCulloch';
+          case 'mclennan': return 'McLennan';
+          case 'mcmullen': return 'McMullen';
+          default: break;
         }
         break;
       default:
