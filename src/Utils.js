@@ -1,24 +1,16 @@
 const REGION_MODE_COLORS = [
-  // Orangish
-  '#ffb367',
-  '#ec823a',
-  '#ff5200',
-  // Yellowish
-  '#ffe277',
-  '#ffd31d',
-  '#f0a500',
-  // Greenish
-  '#79d70f',
-  '#2fc4b2',
-  '#12947f',
-  // Bluish
-  '#8ccbbe',
-  '#63b7af',
-  '#3797a4',
-  // Purplish
-  '#ad6989',
-  '#5c2a9d',
-  '#562349',
+  '#b2b2cd',
+  '#b1e6f5',
+  '#dfdca9',
+  '#fbbe1e',
+  '#ffd5d5',
+  '#ffeeaa',
+  '#cfeed6',
+  '#e0e54a',
+  '#caafcf',
+  '#cec6de',
+  '#ddebea',
+  '#aaccca',
 ];
 const NUM_REGION_MODE_COLORS = REGION_MODE_COLORS.length;
 
