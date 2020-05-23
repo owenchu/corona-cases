@@ -743,6 +743,7 @@ const Michigan = {
     [
       'regions',
       new Set([
+        'See Michigan Emergency Preparedness Regions at https://www.michigan.gov/mdhhs/0,5885,7-339-71548_54783_54826_56171---,00.html',
         'Federal Correctional Institution (FCI) reports cases separately and is treated as a separate region.',
         'Michigan Department of Corrections (MDOC) reports cases separately and is treated as a separate region.',
       ]),
@@ -1750,7 +1751,7 @@ const Texas = {
     [
       'regions',
       new Set([
-        'See Texas Public Health Regions at https://dshs.texas.gov/regions/state.shtm.',
+        'See Texas Public Health Regions at https://dshs.texas.gov/regions/state.shtm',
       ]),
     ],
   ]),
