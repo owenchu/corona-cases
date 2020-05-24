@@ -61,6 +61,13 @@ function capitalizeCountyName(countyName) {
 
 function normalizeCountyName(stateName, countyName) {
     switch (stateName) {
+      case 'Florida':
+        switch (countyName) {
+          case 'desoto': return 'DeSoto';
+          case 'miami-dade': return 'Miami-Dade';
+          default: break;
+        }
+        break;
       case 'Illinois':
         switch (countyName) {
           case 'dekalb': return 'DeKalb';
