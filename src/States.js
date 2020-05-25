@@ -1,3 +1,5 @@
+import React from "react";
+
 import CaliforniaMap from './maps/CaliforniaMap';
 import FloridaMap from './maps/FloridaMap';
 import IllinoisMap from './maps/IllinoisMap';
@@ -8,6 +10,11 @@ import NewJerseyMap from './maps/NewJerseyMap';
 import NewYorkMap from './maps/NewYorkMap';
 import PennsylvaniaMap from './maps/PennsylvaniaMap';
 import TexasMap from './maps/TexasMap';
+
+function Link(props) {
+  const {to} = props;
+  return <a href={to} target="_blank" rel="noopener noreferrer">{to}</a>
+}
 
 const California = {
   name: 'California',
@@ -366,7 +373,9 @@ const Florida = {
     [
       'regions',
       new Set([
-        'See Florida Emergency Management Regions at https://www.floridadisaster.org/dem/directors-office/regions/',
+        <>
+          See Florida Emergency Management Regions at <Link to='https://www.floridadisaster.org/dem/directors-office/regions/' />.
+        </>,
       ]),
     ],
   ]),
@@ -700,7 +709,9 @@ const Maryland = {
     [
       'regions',
       new Set([
-        'See Maryland Emergency Management Regions at https://mema.maryland.gov/Pages/OSPREY-dashboard.aspx',
+        <>
+          See Maryland Emergency Management Regions at <Link to='https://mema.maryland.gov/Pages/OSPREY-dashboard.aspx' />.
+        </>,
       ]),
     ],
   ]),
@@ -785,7 +796,9 @@ const Massachusetts = {
     [
       'regions',
       new Set([
-        'The regions are an approximation of the EOHHS regions (https://matracking.ehs.state.ma.us/eohhs_regions/eohhs_regions.html), where each region consists of individual communities instead of counties.',
+        <>
+          The regions are an approximation of the EOHHS regions (<Link to='https://matracking.ehs.state.ma.us/eohhs_regions/eohhs_regions.html' />), where each region consists of individual communities instead of counties.
+        </>
       ]),
     ],
   ]),
@@ -1032,7 +1045,9 @@ const Michigan = {
     [
       'regions',
       new Set([
-        'See Michigan Emergency Preparedness Regions at https://www.michigan.gov/mdhhs/0,5885,7-339-71548_54783_54826_56171---,00.html',
+        <>
+          See Michigan Emergency Preparedness Regions at <Link to='https://www.michigan.gov/mdhhs/0,5885,7-339-71548_54783_54826_56171---,00.html' />.
+        </>,
         'Federal Correctional Institution (FCI) reports cases separately and is treated as a separate region.',
         'Michigan Department of Corrections (MDOC) reports cases separately and is treated as a separate region.',
       ]),
@@ -2040,7 +2055,9 @@ const Texas = {
     [
       'regions',
       new Set([
-        'See Texas Public Health Regions at https://dshs.texas.gov/regions/state.shtm',
+        <>
+          See Texas Public Health Regions at <Link to='https://dshs.texas.gov/regions/state.shtm' />.
+        </>,
       ]),
     ],
   ]),
