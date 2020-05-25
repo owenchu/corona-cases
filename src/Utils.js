@@ -38,7 +38,7 @@ function getCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
     ++colorIndex;
   }
 
-  console.error(`Unrecognized county: ${countyToFill}`);
+  console.error(`Default fill color used for unrecognized county: ${countyToFill}`);
   return DEFAULT_SELECTED_COUNTY_COLOR;
 }
 

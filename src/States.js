@@ -1,6 +1,7 @@
 import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
 import SvgBlankFloridaMap from './SvgBlankFloridaMap';
 import SvgBlankIllinoisMap from './SvgBlankIllinoisMap';
+import SvgBlankMarylandMap from './SvgBlankMarylandMap';
 import SvgBlankMassachusettsMap from './SvgBlankMassachusettsMap';
 import SvgBlankMichiganMap from './SvgBlankMichiganMap';
 import SvgBlankNewJerseyMap from './SvgBlankNewJerseyMap';
@@ -602,6 +603,104 @@ const Illinois = {
         'Wayne',
         'White',
         'Williamson',
+      ]),
+    ],
+  ]),
+};
+
+const Maryland = {
+  name: 'Maryland',
+  postalCode: 'MD',
+  // https://en.wikipedia.org/wiki/File:Map_of_Maryland_highlighting_Baltimore_County.svg
+  mapComponent: SvgBlankMarylandMap,
+  counties: new Set([
+    'Allegany',
+    'Anne Arundel',
+    'Baltimore',
+    'Baltimore City',
+    'Calvert',
+    'Caroline',
+    'Carroll',
+    'Cecil',
+    'Charles',
+    'Dorchester',
+    'Frederick',
+    'Garrett',
+    'Harford',
+    'Howard',
+    'Kent',
+    'Montgomery',
+    "Prince George's",
+    "Queen Anne's",
+    "St. Mary's",
+    'Somerset',
+    'Talbot',
+    'Washington',
+    'Wicomico',
+    'Worcester',
+  ]),
+  // https://mema.maryland.gov/Pages/OSPREY-dashboard.aspx
+  regions: new Map([
+    [
+      'Capital',
+      new Set([
+        'Frederick',
+        'Montgomery',
+        "Prince George's",
+      ]),
+    ],
+    [
+      'Central',
+      new Set([
+        'Anne Arundel',
+        'Baltimore',
+        'Baltimore City',
+        'Carroll',
+        'Harford',
+        'Howard',
+      ]),
+    ],
+    [
+      'Lower Eastern Shore',
+      new Set([
+        'Dorchester',
+        'Somerset',
+        'Wicomico',
+        'Worcester',
+      ]),
+    ],
+    [
+      'South',
+      new Set([
+        'Calvert',
+        'Charles',
+        "St. Mary's",
+      ]),
+    ],
+    [
+      'Upper Eastern Shore',
+      new Set([
+        'Caroline',
+        'Cecil',
+        'Kent',
+        "Queen Anne's",
+        'Talbot',
+      ]),
+    ],
+    [
+      'Western',
+      new Set([
+        'Allegany',
+        'Garrett',
+        'Washington',
+      ]),
+    ],
+  ]),
+  notes: new Map([
+    [
+      'regions',
+      new Set([
+        'See Maryland Emergency Management Regions at https://mema.maryland.gov/Pages/OSPREY-dashboard.aspx',
       ]),
     ],
   ]),
@@ -1951,6 +2050,7 @@ export default new Map([
   [California.name, California],
   [Florida.name, Florida],
   [Illinois.name, Illinois],
+  [Maryland.name, Maryland],
   [Massachusetts.name, Massachusetts],
   [Michigan.name, Michigan],
   [NewJersey.name, NewJersey],

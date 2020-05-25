@@ -28,7 +28,7 @@ function useData(state, period) {
           }
           const county = normalizeCountyName(state.name, d.county);
           if (!state.counties.has(county)) {
-            console.error(`Unrecognized county: ${county}`);
+            console.error(`Unrecognized county returned by API: ${county}`);
           }
         });
 
