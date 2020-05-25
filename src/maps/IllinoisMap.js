@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SvgBlankIllinoisMap(props) {
+function IllinoisMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
@@ -536,4 +536,4 @@ function SvgBlankIllinoisMap(props) {
   );
 }
 
-export default SvgBlankIllinoisMap;
+export default IllinoisMap;

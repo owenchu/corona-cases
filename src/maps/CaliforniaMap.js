@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SvgBlankCaliforniaMap(props) {
+function CaliforniaMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
@@ -324,5 +324,5 @@ function SvgBlankCaliforniaMap(props) {
   );
 }
 
-export default SvgBlankCaliforniaMap;
+export default CaliforniaMap;
 

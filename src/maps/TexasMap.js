@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SvgBlankTexasMap(props) {
+function TexasMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
@@ -1503,5 +1503,5 @@ function SvgBlankTexasMap(props) {
   );
 }
 
-export default SvgBlankTexasMap;
+export default TexasMap;
 

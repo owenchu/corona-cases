@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SvgBlankMapOfNewYorkCounties(props) {
+function NewYorkMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
@@ -728,5 +728,5 @@ function SvgBlankMapOfNewYorkCounties(props) {
   );
 }
 
-export default SvgBlankMapOfNewYorkCounties;
+export default NewYorkMap;
 

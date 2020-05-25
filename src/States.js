@@ -1,19 +1,19 @@
-import SvgBlankCaliforniaMap from './SvgBlankCaliforniaMap';
-import SvgBlankFloridaMap from './SvgBlankFloridaMap';
-import SvgBlankIllinoisMap from './SvgBlankIllinoisMap';
-import SvgBlankMarylandMap from './SvgBlankMarylandMap';
-import SvgBlankMassachusettsMap from './SvgBlankMassachusettsMap';
-import SvgBlankMichiganMap from './SvgBlankMichiganMap';
-import SvgBlankNewJerseyMap from './SvgBlankNewJerseyMap';
-import SvgBlankNewYorkMap from './SvgBlankNewYorkMap';
-import SvgBlankPennsylvaniaMap from './SvgBlankPennsylvaniaMap';
-import SvgBlankTexasMap from './SvgBlankTexasMap';
+import CaliforniaMap from './maps/CaliforniaMap';
+import FloridaMap from './maps/FloridaMap';
+import IllinoisMap from './maps/IllinoisMap';
+import MarylandMap from './maps/MarylandMap';
+import MassachusettsMap from './maps/MassachusettsMap';
+import MichiganMap from './maps/MichiganMap';
+import NewJerseyMap from './maps/NewJerseyMap';
+import NewYorkMap from './maps/NewYorkMap';
+import PennsylvaniaMap from './maps/PennsylvaniaMap';
+import TexasMap from './maps/TexasMap';
 
 const California = {
   name: 'California',
   postalCode: 'CA',
   // https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg
-  mapComponent: SvgBlankCaliforniaMap,
+  mapComponent: CaliforniaMap,
   counties: new Set([
     "Alameda",
     "Alpine",
@@ -187,7 +187,7 @@ const Florida = {
   name: 'Florida',
   postalCode: 'FL',
   // https://commons.wikimedia.org/wiki/File:Map_of_Florida_highlighting_Marion_County.svg
-  mapComponent: SvgBlankFloridaMap,
+  mapComponent: FloridaMap,
   counties: new Set([
     'Alachua',
     'Baker',
@@ -376,7 +376,7 @@ const Illinois = {
   name: 'Illinois',
   postalCode: 'IL',
   // https://commons.wikimedia.org/wiki/File:Map_of_Illinois_counties.svg
-  mapComponent: SvgBlankIllinoisMap,
+  mapComponent: IllinoisMap,
   counties: new Set([
     'Adams',
     'Alexander',
@@ -612,7 +612,7 @@ const Maryland = {
   name: 'Maryland',
   postalCode: 'MD',
   // https://en.wikipedia.org/wiki/File:Map_of_Maryland_highlighting_Baltimore_County.svg
-  mapComponent: SvgBlankMarylandMap,
+  mapComponent: MarylandMap,
   counties: new Set([
     'Allegany',
     'Anne Arundel',
@@ -710,7 +710,7 @@ const Massachusetts = {
   name: 'Massachusetts',
   postalCode: 'MA',
   // https://commons.wikimedia.org/wiki/File:Map_of_Massachusetts_highlighting_Suffolk_County.svg
-  mapComponent: SvgBlankMassachusettsMap,
+  mapComponent: MassachusettsMap,
   counties: new Set([
     'Barnstable',
     'Berkshire',
@@ -795,7 +795,7 @@ const Michigan = {
   name: 'Michigan',
   postalCode: 'MI',
   // https://commons.wikimedia.org/wiki/File:Blank_map_of_Michigan.svg
-  mapComponent: SvgBlankMichiganMap,
+  mapComponent: MichiganMap,
   counties: new Set([
     'Alcona',
     'Alger',
@@ -1044,7 +1044,7 @@ const NewJersey = {
   name: 'New Jersey',
   postalCode: 'NJ',
   // https://commons.wikimedia.org/wiki/File:New_Jersey_Counties_Outline.svg
-  mapComponent: SvgBlankNewJerseyMap,
+  mapComponent: NewJerseyMap,
   counties: new Set([
     'Atlantic',
     'Bergen',
@@ -1113,7 +1113,7 @@ const NewYork = {
   name: 'New York',
   postalCode: 'NY',
   // https://commons.wikimedia.org/wiki/File:Blank_Map_of_New_York_Counties.svg
-  mapComponent: SvgBlankNewYorkMap,
+  mapComponent: NewYorkMap,
   counties: new Set([
     'Albany',
     'Allegany',
@@ -1299,7 +1299,7 @@ const Pennsylvania = {
   name: 'Pennsylvania',
   postalCode: 'PA',
   // https://en.wikipedia.org/wiki/File:Map_of_Pennsylvania_highlighting_Wayne_County.svg
-  mapComponent: SvgBlankPennsylvaniaMap,
+  mapComponent: PennsylvaniaMap,
   counties: new Set([
     'Adams',
     'Allegheny',
@@ -1475,7 +1475,7 @@ const Texas = {
   name: 'Texas',
   postalCode: 'TX',
   // https://commons.wikimedia.org/wiki/File:Map_of_Texas_highlighting_Swisher_County.svg
-  mapComponent: SvgBlankTexasMap,
+  mapComponent: TexasMap,
   counties: new Set([
     'Anderson',
     'Andrews',
