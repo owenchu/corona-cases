@@ -13,6 +13,14 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Georgia':
+        switch (countyName) {
+          case 'dekalb': return 'DeKalb';
+          case 'mcduffie': return 'McDuffie';
+          case 'mcintosh': return 'McIntosh';
+          default: break;
+        }
+        break;
       case 'Illinois':
         switch (countyName) {
           case 'dekalb': return 'DeKalb';

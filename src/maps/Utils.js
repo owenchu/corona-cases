@@ -11,6 +11,12 @@ const REGION_MODE_COLORS = [
   '#cec6de',
   '#ddebea',
   '#aaccca',
+  '#edf492',
+  '#ff9a76',
+  '#74d4c0',
+  '#cceabb',
+  '#f5a8a8',
+  '#ffd31d',
 ];
 const NUM_REGION_MODE_COLORS = REGION_MODE_COLORS.length;
 
