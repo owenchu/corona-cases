@@ -63,6 +63,13 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Virginia':
+        switch (countyName) {
+          case 'isle of wight': return 'Isle of Wight';
+          case 'king and queen': return 'King and Queen';
+          default: break;
+        }
+        break;
       default:
         break;
     }

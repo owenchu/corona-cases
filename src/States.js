@@ -12,10 +12,11 @@ import NewJerseyMap from './maps/NewJerseyMap';
 import NewYorkMap from './maps/NewYorkMap';
 import PennsylvaniaMap from './maps/PennsylvaniaMap';
 import TexasMap from './maps/TexasMap';
+import VirginiaMap from './maps/VirginiaMap';
 
 function Link(props) {
-  const {to} = props;
-  return <a href={to} target="_blank" rel="noopener noreferrer">{to}</a>
+  const {to, text} = props;
+  return <a href={to} target="_blank" rel="noopener noreferrer">{text || to}</a>
 }
 
 const California = {
@@ -2513,6 +2514,479 @@ const Texas = {
   ]),
 };
 
+const Virginia = {
+  name: 'Virginia',
+  postalCode: 'VA',
+  // https://commons.wikimedia.org/wiki/File:Map_of_Virginia_counties_and_cities.svg
+  mapComponent: VirginiaMap,
+  counties: new Set([
+    // Counties
+    'Accomack',
+    'Albemarle',
+    'Alleghany',
+    'Amelia',
+    'Amherst',
+    'Appomattox',
+    'Arlington',
+    'Augusta',
+    'Bath',
+    'Bedford',
+    'Bland',
+    'Botetourt',
+    'Brunswick',
+    'Buchanan',
+    'Buckingham',
+    'Campbell',
+    'Caroline',
+    'Carroll',
+    'Charles City',
+    'Charlotte',
+    'Chesterfield',
+    'Clarke',
+    'Craig',
+    'Culpeper',
+    'Cumberland',
+    'Dickenson',
+    'Dinwiddie',
+    'Essex',
+    'Fairfax',
+    'Fauquier',
+    'Floyd',
+    'Fluvanna',
+    'Franklin',
+    'Frederick',
+    'Giles',
+    'Gloucester',
+    'Goochland',
+    'Grayson',
+    'Greene',
+    'Greensville',
+    'Halifax',
+    'Hanover',
+    'Henrico',
+    'Henry',
+    'Highland',
+    'Isle of Wight',
+    'James City',
+    'King and Queen',
+    'King George',
+    'King William',
+    'Lancaster',
+    'Lee',
+    'Loudoun',
+    'Louisa',
+    'Lunenburg',
+    'Madison',
+    'Mathews',
+    'Mecklenburg',
+    'Middlesex',
+    'Montgomery',
+    'Nelson',
+    'New Kent',
+    'Northampton',
+    'Northumberland',
+    'Nottoway',
+    'Orange',
+    'Page',
+    'Patrick',
+    'Pittsylvania',
+    'Powhatan',
+    'Prince Edward',
+    'Prince George',
+    'Prince William',
+    'Pulaski',
+    'Rappahannock',
+    'Richmond',
+    'Roanoke',
+    'Rockbridge',
+    'Rockingham',
+    'Russell',
+    'Scott',
+    'Shenandoah',
+    'Smyth',
+    'Southampton',
+    'Spotsylvania',
+    'Stafford',
+    'Surry',
+    'Sussex',
+    'Tazewell',
+    'Warren',
+    'Washington',
+    'Westmoreland',
+    'Wise',
+    'Wythe',
+    'York',
+    // Independent cities
+    'Alexandria',
+    'Bristol',
+    'Buena Vista',
+    'Charlottesville',
+    'Chesapeake',
+    'Colonial Heights',
+    'Covington',
+    'Danville',
+    'Emporia',
+    'Fairfax City',
+    'Falls Church',
+    'Franklin City',
+    'Fredericksburg',
+    'Galax',
+    'Hampton',
+    'Harrisonburg',
+    'Hopewell',
+    'Lexington',
+    'Lynchburg',
+    'Manassas',
+    'Manassas Park',
+    'Martinsville',
+    'Newport News',
+    'Norfolk',
+    'Norton',
+    'Petersburg',
+    'Poquoson',
+    'Portsmouth',
+    'Radford',
+    'Richmond City',
+    'Roanoke City',
+    'Salem',
+    'Staunton',
+    'Suffolk',
+    'Virginia Beach',
+    'Waynesboro',
+    'Williamsburg',
+    'Winchester',
+  ]),
+  // https://www.vdh.virginia.gov/coronavirus/
+  // https://www.vdh.virginia.gov/local-health-districts/
+  regions: new Map([
+    [
+      'Alexandria',
+      new Set([
+        'Alexandria',
+      ]),
+    ],
+    [
+      'Alleghany',
+      new Set([
+        'Alleghany',
+        'Botetourt',
+        'Covington',
+        'Craig',
+        'Roanoke',
+        'Roanoke City',
+        'Salem',
+      ]),
+    ],
+    [
+      'Arlington',
+      new Set([
+        'Arlington',
+      ]),
+    ],
+    [
+      'Central Shenandoah',
+      new Set([
+        'Augusta',
+        'Bath',
+        'Buena Vista',
+        'Harrisonburg',
+        'Highland',
+        'Lexington',
+        'Rockbridge',
+        'Rockingham',
+        'Staunton',
+        'Waynesboro',
+      ]),
+    ],
+    [
+      'Central Virginia',
+      new Set([
+        'Amherst',
+        'Appomattox',
+        'Bedford',
+        'Campbell',
+        'Lynchburg',
+      ]),
+    ],
+    [
+      'Chesapeake',
+      new Set([
+        'Chesapeake',
+      ]),
+    ],
+    [
+      'Chesterfield',
+      new Set([
+        'Chesterfield',
+        'Colonial Heights',
+        'Powhatan',
+      ]),
+    ],
+    [
+      'Chickahominy',
+      new Set([
+        'Charles City',
+        'Goochland',
+        'Hanover',
+        'New Kent',
+      ]),
+    ],
+    [
+      'Crater',
+      new Set([
+        'Dinwiddie',
+        'Emporia',
+        'Greensville',
+        'Hopewell',
+        'Petersburg',
+        'Prince George',
+        'Surry',
+        'Sussex',
+      ]),
+    ],
+    [
+      'Cumberland Plateau',
+      new Set([
+        'Buchanan',
+        'Dickenson',
+        'Russell',
+        'Tazewell',
+      ]),
+    ],
+    [
+      'Eastern Shore',
+      new Set([
+        'Accomack',
+        'Northampton',
+      ]),
+    ],
+    [
+      'Fairfax',
+      new Set([
+        'Fairfax',
+        'Fairfax City',
+      ]),
+    ],
+    [
+      'Hampton',
+      new Set([
+        'Hampton',
+      ]),
+    ],
+    [
+      'Henrico',
+      new Set([
+        'Henrico',
+      ]),
+    ],
+    [
+      'Lenowisco',
+      new Set([
+        'Lee',
+        'Norton',
+        'Scott',
+        'Wise',
+      ]),
+    ],
+    [
+      'Lord Fairfax',
+      new Set([
+        'Clarke',
+        'Frederick',
+        'Page',
+        'Shenandoah',
+        'Warren',
+        'Winchester',
+      ]),
+    ],
+    [
+      'Loudoun',
+      new Set([
+        'Loudoun',
+      ]),
+    ],
+    [
+      'Mount Rogers',
+      new Set([
+        'Bland',
+        'Bristol',
+        'Carroll',
+        'Galax',
+        'Grayson',
+        'Smyth',
+        'Washington',
+        'Wythe',
+      ]),
+    ],
+    [
+      'New River',
+      new Set([
+        'Giles',
+        'Montgomery',
+        'Pulaski',
+        'Radford',
+      ]),
+    ],
+    [
+      'Norfolk',
+      new Set([
+        'Norfolk',
+      ]),
+    ],
+    [
+      'Peninsula',
+      new Set([
+        'James City',
+        'Newport News',
+        'Poquoson',
+        'Williamsburg',
+        'York',
+      ]),
+    ],
+    [
+      'Piedmont',
+      new Set([
+        'Amelia',
+        'Buckingham',
+        'Charlotte',
+        'Cumberland',
+        'Lunenburg',
+        'Nottoway',
+        'Prince Edward',
+      ]),
+    ],
+    [
+      'Pittsylvania/Danville',
+      new Set([
+        'Danville',
+        'Pittsylvania',
+      ]),
+    ],
+    [
+      'Portsmouth',
+      new Set([
+        'Portsmouth',
+      ]),
+    ],
+    [
+      'Prince William',
+      new Set([
+        'Manassas',
+        'Manassas Park',
+        'Prince William',
+      ]),
+    ],
+    [
+      'Rappahannock',
+      new Set([
+        'Caroline',
+        'Fredericksburg',
+        'King George',
+        'Spotsylvania',
+        'Stafford',
+      ]),
+    ],
+    [
+      'Rappahannock/Rapidan',
+      new Set([
+        'Culpeper',
+        'Fauquier',
+        'Madison',
+        'Orange',
+        'Rappahannock',
+      ]),
+    ],
+    [
+      'Richmond',
+      new Set([
+        'Richmond City',
+      ]),
+    ],
+    [
+      'Roanoke',
+      new Set([
+        'Roanoke City',
+      ]),
+    ],
+    [
+      'Southside',
+      new Set([
+        'Brunswick',
+        'Halifax',
+        'Mecklenburg',
+      ]),
+    ],
+    [
+      'Thomas Jefferson',
+      new Set([
+        'Albemarle',
+        'Charlottesville',
+        'Fluvanna',
+        'Greene',
+        'Louisa',
+        'Nelson',
+      ]),
+    ],
+    [
+      'Three Rivers',
+      new Set([
+        'Essex',
+        'Gloucester',
+        'King William',
+        'King and Queen',
+        'Lancaster',
+        'Mathews',
+        'Middlesex',
+        'Northumberland',
+        'Richmond',
+        'Westmoreland',
+      ]),
+    ],
+    [
+      'Virginia Beach',
+      new Set([
+        'Virginia Beach',
+      ]),
+    ],
+    [
+      'West Piedmont',
+      new Set([
+        'Franklin',
+        'Henry',
+        'Martinsville',
+        'Patrick',
+      ]),
+    ],
+    [
+      'Western Tidewater',
+      new Set([
+        'Franklin City',
+        'Isle of Wight',
+        'Southampton',
+        'Suffolk',
+      ]),
+    ],
+  ]),
+  notes: new Map([
+    [
+      'counties',
+      new Set([
+        <>
+          Virginia has 38 independent cities. They are considered county-equivalents for census purposes. See <Link to='https://en.wikipedia.org/wiki/List_of_cities_and_counties_in_Virginia#List_of_independent_cities' text='Wikipedia' />.
+        </>,
+      ]),
+    ],
+    [
+      'regions',
+      new Set([
+        <>
+          See Virginia Local Health Districts <Link to='https://www.vdh.virginia.gov/local-health-districts/' text='here' />.
+        </>,
+      ]),
+    ],
+  ]),
+};
+
 export default new Map([
   [California.name, California],
   [Connecticut.name, Connecticut],
@@ -2526,4 +3000,5 @@ export default new Map([
   [NewYork.name, NewYork],
   [Pennsylvania.name, Pennsylvania],
   [Texas.name, Texas],
+  [Virginia.name, Virginia],
 ]);
