@@ -147,7 +147,7 @@ function Main(props) {
   const {state} = props;
   const [period, setPeriod] = useState(60);
   const data = useData(state, period);
-  const [regionMode, setRegionMode] = useState(true);
+  const [regionMode, setRegionMode] = useState(state.regions.size > 0);
   const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(state.counties);
   const [compact, setCompact] = useState(false);
@@ -223,13 +223,13 @@ function Main(props) {
     }
     for (const date in d.timeline.cases) {
       const offset = period - today.diff(dayjs(date), 'day') - 1;
-      if (offset >= 0) {
+      if (offset >= 0 && d.timeline.cases[date]) {
         chartData[offset].cases += d.timeline.cases[date];
       }
     }
     for (const date in d.timeline.deaths) {
       const offset = period - today.diff(dayjs(date), 'day') - 1;
-      if (offset >= 0) {
+      if (offset >= 0 && d.timeline.deaths[date]) {
         chartData[offset].deaths += d.timeline.deaths[date];
       }
     }

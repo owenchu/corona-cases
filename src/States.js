@@ -1,6 +1,7 @@
 import React from "react";
 
 import CaliforniaMap from './maps/CaliforniaMap';
+import ConnecticutMap from './maps/ConnecticutMap';
 import FloridaMap from './maps/FloridaMap';
 import GeorgiaMap from './maps/GeorgiaMap';
 import IllinoisMap from './maps/IllinoisMap';
@@ -189,6 +190,24 @@ const California = {
       ]),
     ],
   ]),
+};
+
+const Connecticut = {
+  name: 'Connecticut',
+  postalCode: 'CT',
+  // https://commons.wikimedia.org/wiki/File:CTMap_county_boundaries.svg
+  mapComponent: ConnecticutMap,
+  counties: new Set([
+    'Fairfield',
+    'Hartford',
+    'Litchfield',
+    'Middlesex',
+    'New Haven',
+    'New London',
+    'Tolland',
+    'Windham',
+  ]),
+  regions: new Map(),
 };
 
 const Florida = {
@@ -2496,6 +2515,7 @@ const Texas = {
 
 export default new Map([
   [California.name, California],
+  [Connecticut.name, Connecticut],
   [Florida.name, Florida],
   [Georgia.name, Georgia],
   [Illinois.name, Illinois],

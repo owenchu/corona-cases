@@ -92,7 +92,9 @@ function CountySelector(props) {
                     className={classes.modeControlSelect}
                     value={regionMode}
                     onChange={handleModeChange}>
-                    <MenuItem value={true}>REGION</MenuItem>
+                    {state.regions.size > 0 &&
+                      <MenuItem value={true}>REGION</MenuItem>
+                    }
                     <MenuItem value={false}>COUNTY</MenuItem>
                   </Select>
                 }
