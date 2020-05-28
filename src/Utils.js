@@ -33,6 +33,14 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Louisiana':
+        switch (countyName) {
+          case 'de soto': return 'DeSoto';
+          case 'lasalle': return 'LaSalle';
+          case 'st. john the baptist': return 'St. John the Baptist';
+          default: break;
+        }
+        break;
       case 'Massachusetts':
         switch (countyName) {
           case 'dukes and nantucket': return 'Dukes';
