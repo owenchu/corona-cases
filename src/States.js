@@ -2053,7 +2053,7 @@ const Ohio = {
     'Wood',
     'Wyandot',
   ]),
-  // https://coronavirus.ohio.gov/wps/wcm/connect/gov/6cfe85c6-7cec-4d64-9b48-6652efa6e558/Regions+and+zones+slides+04.01.20.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-6cfe85c6-7cec-4d64-9b48-6652efa6e558-n6Yvhmb
+  // https://coronavirus.ohio.gov/wps/portal/gov/covid-19/resources/news-releases-news-you-can-use/hospital-preparedness-regions-and-healthcare-zones
   regions: new Map([
     [
       'Healthcare Zone 1',
@@ -2164,7 +2164,7 @@ const Ohio = {
       'regions',
       new Set([
         <>
-          See Ohio Hospital Preparedness Regions and Healthcare Zones <Link to='https://coronavirus.ohio.gov/wps/wcm/connect/gov/6cfe85c6-7cec-4d64-9b48-6652efa6e558/Regions+and+zones+slides+04.01.20.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-6cfe85c6-7cec-4d64-9b48-6652efa6e558-n6Yvhmb' text='here' />.
+          See Ohio Hospital Preparedness Regions and Healthcare Zones <Link to='https://coronavirus.ohio.gov/wps/portal/gov/covid-19/resources/news-releases-news-you-can-use/hospital-preparedness-regions-and-healthcare-zones' text='here' />.
         </>,
       ]),
     ],
