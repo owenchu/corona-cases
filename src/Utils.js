@@ -21,6 +21,14 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Indiana':
+        switch (countyName) {
+          case 'dekalb': return 'DeKalb';
+          case 'lagrange': return 'LaGrange';
+          case 'laporte': return 'LaPorte';
+          default: break;
+        }
+        break;
       case 'Illinois':
         switch (countyName) {
           case 'dekalb': return 'DeKalb';
