@@ -13,7 +13,7 @@ function IndianaMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
-    <svg viewBox='-16037 -19651 28871 44234' width='100%'>
+    <svg viewBox='-16037 -19651 28871 44234' width='80%'>
       <g
         className={classes.svgGroup}
         fill={unselectedCountyColor}
