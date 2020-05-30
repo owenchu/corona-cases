@@ -1,3 +1,5 @@
+import {useState} from 'react';
+
 const REGION_MODE_COLORS = [
   '#b2b2cd',
   '#b1e6f5',
@@ -50,9 +52,13 @@ function getCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
 
 function useMap(mapProps) {
   const {state, regionMode, selectedCounties, onToggleCounty} = mapProps;
+  const [hoveredCounty, setHoveredCounty] = useState(null);
   return {
     svgElementProps: (county) => ({
       fill: getCountyFillColor(state, regionMode, selectedCounties, county),
+      opacity: hoveredCounty === county ? 0.7 : 1,
+      onMouseEnter: () => setHoveredCounty(county),
+      onMouseLeave: () => setHoveredCounty(null),
       onClick: () => onToggleCounty(county),
     }),
     unselectedCountyColor: DEFAULT_UNSELECTED_COUNTY_COLOR,
