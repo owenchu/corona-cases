@@ -13,7 +13,7 @@ function MassachusettsMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
-    <svg viewBox="-11101 -5482 29756 18193" width='100%'>
+    <svg viewBox="-11101 -5482 29756 18193" width='70%'>
       <g
         className={classes.svgGroup}
         strokeWidth={47}

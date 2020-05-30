@@ -13,7 +13,7 @@ function OhioMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
-    <svg viewBox='-17320 -17038 36754 39952' width='80%'>
+    <svg viewBox='-17320 -17038 36754 39952' width='40%'>
       <g
         className={classes.svgGroup}
         fill={unselectedCountyColor}

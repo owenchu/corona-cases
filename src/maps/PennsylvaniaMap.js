@@ -13,7 +13,7 @@ function PennsylvaniaMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
-    <svg viewBox="-22723 -14068 49503 28456" width='100%'>
+    <svg viewBox="-22723 -14068 49503 28456" width='50%'>
       <g
         className={classes.svgGroup}
         fill={unselectedCountyColor}

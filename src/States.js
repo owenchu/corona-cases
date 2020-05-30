@@ -27,7 +27,10 @@ const California = {
   name: 'California',
   postalCode: 'CA',
   // https://commons.wikimedia.org/wiki/File:Blank_California_Map.svg
-  mapComponent: CaliforniaMap,
+  map: {
+    component: CaliforniaMap,
+    position: 'side',
+  },
   counties: new Set([
     "Alameda",
     "Alpine",
@@ -201,7 +204,10 @@ const Connecticut = {
   name: 'Connecticut',
   postalCode: 'CT',
   // https://commons.wikimedia.org/wiki/File:CTMap_county_boundaries.svg
-  mapComponent: ConnecticutMap,
+  map: {
+    component: ConnecticutMap,
+    position: 'side',
+  },
   counties: new Set([
     'Fairfield',
     'Hartford',
@@ -219,7 +225,10 @@ const Florida = {
   name: 'Florida',
   postalCode: 'FL',
   // https://commons.wikimedia.org/wiki/File:Map_of_Florida_highlighting_Marion_County.svg
-  mapComponent: FloridaMap,
+  map: {
+    component: FloridaMap,
+    position: 'side',
+  },
   counties: new Set([
     'Alachua',
     'Baker',
@@ -410,7 +419,10 @@ const Georgia = {
   name: 'Georgia',
   postalCode: 'GA',
   // https://commons.wikimedia.org/wiki/File:Map_of_Georgia_highlighting_Macon-Warner_Robins-Fort_Valley_CSA.svg
-  mapComponent: GeorgiaMap,
+  map: {
+    component: GeorgiaMap,
+    position: 'side',
+  },
   counties: new Set([
     'Appling',
     'Atkinson',
@@ -840,7 +852,10 @@ const Indiana = {
   name: 'Indiana',
   postalCode: 'IN',
   // https://en.wikipedia.org/wiki/File:Map_of_Indiana_highlighting_White_County.svg
-  mapComponent: IndianaMap,
+  map: {
+    component: IndianaMap,
+    position: 'side',
+  },
   counties: new Set([
     'Adams',
     'Allen',
@@ -1096,7 +1111,10 @@ const Illinois = {
   name: 'Illinois',
   postalCode: 'IL',
   // https://commons.wikimedia.org/wiki/File:Map_of_Illinois_counties.svg
-  mapComponent: IllinoisMap,
+  map: {
+    component: IllinoisMap,
+    position: 'side',
+  },
   counties: new Set([
     'Adams',
     'Alexander',
@@ -1332,7 +1350,10 @@ const Louisiana = {
   name: 'Louisiana',
   postalCode: 'LA',
   // https://upload.wikimedia.org/wikipedia/commons/a/ac/Map_of_Louisiana_highlighting_Jefferson_Davis_Parish.svg
-  mapComponent: LouisianaMap,
+  map: {
+    component: LouisianaMap,
+    position: 'side',
+  },
   counties: new Set([
     'Acadia',
     'Allen',
@@ -1527,7 +1548,10 @@ const Maryland = {
   name: 'Maryland',
   postalCode: 'MD',
   // https://en.wikipedia.org/wiki/File:Map_of_Maryland_highlighting_Baltimore_County.svg
-  mapComponent: MarylandMap,
+  map: {
+    component: MarylandMap,
+    position: 'top',
+  },
   counties: new Set([
     'Allegany',
     'Anne Arundel',
@@ -1627,7 +1651,10 @@ const Massachusetts = {
   name: 'Massachusetts',
   postalCode: 'MA',
   // https://commons.wikimedia.org/wiki/File:Map_of_Massachusetts_highlighting_Suffolk_County.svg
-  mapComponent: MassachusettsMap,
+  map: {
+    component: MassachusettsMap,
+    position: 'top',
+  },
   counties: new Set([
     'Barnstable',
     'Berkshire',
@@ -1714,7 +1741,10 @@ const Michigan = {
   name: 'Michigan',
   postalCode: 'MI',
   // https://commons.wikimedia.org/wiki/File:Blank_map_of_Michigan.svg
-  mapComponent: MichiganMap,
+  map: {
+    component: MichiganMap,
+    position: 'side',
+  },
   counties: new Set([
     'Alcona',
     'Alger',
@@ -1965,7 +1995,10 @@ const NewJersey = {
   name: 'New Jersey',
   postalCode: 'NJ',
   // https://commons.wikimedia.org/wiki/File:New_Jersey_Counties_Outline.svg
-  mapComponent: NewJerseyMap,
+  map: {
+    component: NewJerseyMap,
+    position: 'side',
+  },
   counties: new Set([
     'Atlantic',
     'Bergen',
@@ -2034,7 +2067,10 @@ const NewYork = {
   name: 'New York',
   postalCode: 'NY',
   // https://commons.wikimedia.org/wiki/File:Blank_Map_of_New_York_Counties.svg
-  mapComponent: NewYorkMap,
+  map: {
+    component: NewYorkMap,
+    position: 'side',
+  },
   counties: new Set([
     'Albany',
     'Allegany',
@@ -2220,7 +2256,10 @@ const NorthCarolina = {
   name: 'North Carolina',
   postalCode: 'NC',
   // https://commons.wikimedia.org/wiki/File:Map_of_North_Carolina_highlighting_Wake_County.svg
-  mapComponent: NorthCarolinaMap,
+  map: {
+    component: NorthCarolinaMap,
+    position: 'top',
+  },
   counties: new Set([
     'Alamance',
     'Alexander',
@@ -2462,7 +2501,10 @@ const Ohio = {
   name: 'Ohio',
   postalCode: 'OH',
   // https://commons.wikimedia.org/wiki/File:Map_of_Ohio_highlighting_Cuyahoga_County.svg
-  mapComponent: OhioMap,
+  map: {
+    component: OhioMap,
+    position: 'top',
+  },
   counties: new Set([
     'Adams',
     'Allen',
@@ -2675,7 +2717,10 @@ const Pennsylvania = {
   name: 'Pennsylvania',
   postalCode: 'PA',
   // https://en.wikipedia.org/wiki/File:Map_of_Pennsylvania_highlighting_Wayne_County.svg
-  mapComponent: PennsylvaniaMap,
+  map: {
+    component: PennsylvaniaMap,
+    position: 'top',
+  },
   counties: new Set([
     'Adams',
     'Allegheny',
@@ -2851,7 +2896,10 @@ const Texas = {
   name: 'Texas',
   postalCode: 'TX',
   // https://commons.wikimedia.org/wiki/File:Map_of_Texas_highlighting_Swisher_County.svg
-  mapComponent: TexasMap,
+  map: {
+    component: TexasMap,
+    position: 'top',
+  },
   counties: new Set([
     'Anderson',
     'Andrews',
@@ -3428,7 +3476,10 @@ const Virginia = {
   name: 'Virginia',
   postalCode: 'VA',
   // https://commons.wikimedia.org/wiki/File:Map_of_Virginia_counties_and_cities.svg
-  mapComponent: VirginiaMap,
+  map: {
+    component: VirginiaMap,
+    position: 'top',
+  },
   counties: new Set([
     // Counties
     'Accomack',

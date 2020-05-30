@@ -72,7 +72,48 @@ function CountySelector(props) {
     onClearAll();
   };
 
-  const Map = state.mapComponent;
+  const chips = regionMode ? (
+    Array.from(state.regions.keys()).map((r) => (
+      <Chip
+        className={classes.chip}
+        key={r}
+        label={r}
+        clickable
+        color={selectedRegions.has(r) ? 'primary' : 'default'}
+        onClick={handleRegionClick.bind(this, r)} />
+    ))
+  ) : (
+    Array.from(state.counties).map((c) => (
+      <Chip
+        className={classes.chip}
+        key={c}
+        label={c}
+        clickable
+        color={selectedCounties.has(c) ? 'primary' : 'default'}
+        onClick={handleToggleCounty.bind(this, c)} />
+    ))
+  );
+
+  const notes = state.notes && state.notes.has(regionMode ? 'regions' : 'counties') && (
+    Array.from(state.notes.get(regionMode ? 'regions' : 'counties')).map((n, i) => (
+      <Typography
+        key={i}
+        display='block'
+        variant='caption'
+        color='textSecondary'>
+        * {n}
+      </Typography>
+    ))
+  );
+
+  const Map = state.map.component;
+  const map = (
+    <Map
+      state={state}
+      regionMode={regionMode}
+      selectedCounties={selectedCounties}
+      onToggleCounty={handleToggleCounty} />
+  );
 
   return (
     <>
@@ -83,7 +124,7 @@ function CountySelector(props) {
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Grid container spacing={2}>
+          <Grid container justify='center' spacing={2}>
             <Grid item xs={12}>
               <FormControlLabel
                 className={classes.modeControl}
@@ -112,51 +153,37 @@ function CountySelector(props) {
                 Clear all
               </Button>
             </Grid>
-            <Grid item xs={6}>
-              <Box>
-                {regionMode ? (
-                  Array.from(state.regions.keys()).map((r) => (
-                    <Chip
-                      className={classes.chip}
-                      key={r}
-                      label={r}
-                      clickable
-                      color={selectedRegions.has(r) ? 'primary' : 'default'}
-                      onClick={handleRegionClick.bind(this, r)} />
-                  ))
-                ) : (
-                  Array.from(state.counties).map((c) => (
-                    <Chip
-                      className={classes.chip}
-                      key={c}
-                      label={c}
-                      clickable
-                      color={selectedCounties.has(c) ? 'primary' : 'default'}
-                      onClick={handleToggleCounty.bind(this, c)} />
-                  ))
-                )}
-              </Box>
-              <Box mt={4} ml={1}>
-                {state.notes
-                && state.notes.has(regionMode ? 'regions' : 'counties')
-                && Array.from(state.notes.get(regionMode ? 'regions' : 'counties')).map((n, i) => (
-                  <Typography
-                    key={i}
-                    display='block'
-                    variant='caption'
-                    color='textSecondary'>
-                    * {n}
-                  </Typography>
-                ))}
-              </Box>
-            </Grid>
-            <Grid item container justify='center' alignItems='flex-start' xs={6}>
-              <Map
-                state={state}
-                regionMode={regionMode}
-                selectedCounties={selectedCounties}
-                onToggleCounty={handleToggleCounty} />
-            </Grid>
+            {state.map.position === 'side' ? (
+              <>
+                <Grid item xs={6}>
+                  <Box>
+                    {chips}
+                  </Box>
+                  <Box mt={4} ml={1}>
+                    {notes}
+                  </Box>
+                </Grid>
+                <Grid item container justify='center' alignItems='flex-start' xs={6}>
+                  {map}
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item container justify='center' alignItems='flex-start' xs={12}>
+                  {map}
+                </Grid>
+                <Grid item container justify='center' xs={11}>
+                  <Box mt={2}>
+                    {chips}
+                  </Box>
+                  {notes && (
+                    <Box mt={4}>
+                      {notes}
+                    </Box>
+                  )}
+                </Grid>
+              </>
+            )}
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>

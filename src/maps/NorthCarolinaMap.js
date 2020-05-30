@@ -13,7 +13,7 @@ function NorthCarolinaMap(props) {
   const {svgElementProps, unselectedCountyColor} = useMap(props);
   const classes = useStyles();
   return (
-    <svg viewBox='-43999 -10822 80608 30557' width='100%'>
+    <svg viewBox='-43999 -10822 80608 30557' width='80%'>
       <g
         className={classes.svgGroup}
         fill={unselectedCountyColor}
