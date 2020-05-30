@@ -12,8 +12,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import React, {useState} from 'react';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+const EMPTY_SET = new Set();
 
 const useStyles = makeStyles((theme) => ({
   countySelectionPanelSummary: {
@@ -45,7 +47,7 @@ function CountySelector(props) {
     onSelectAll,
     onClearAll,
   } = props;
-  const classes = useStyles();
+  const [hoveredCounties, setHoverCounties] = useState(EMPTY_SET);
 
   const handleModeChange = () => {
     onModeToggle();
@@ -65,12 +67,29 @@ function CountySelector(props) {
       onCountyToggle(county);
     }
   };
+  const handleMouseEnterCounty = (county) => {
+    if (regionMode) {
+      for (const counties of state.regions.values()) {
+        if (counties.has(county)) {
+          setHoverCounties(counties);
+          return;
+        }
+      }
+    } else {
+      setHoverCounties(new Set([county]))
+    }
+  };
+  const handleMouseLeaveCounty = (county) => {
+      setHoverCounties(EMPTY_SET);
+  };
   const handleSelectAll = () => {
     onSelectAll();
   };
   const handleClearAll = () => {
     onClearAll();
   };
+
+  const classes = useStyles();
 
   const chips = regionMode ? (
     Array.from(state.regions.keys()).map((r) => (
@@ -112,7 +131,10 @@ function CountySelector(props) {
       state={state}
       regionMode={regionMode}
       selectedCounties={selectedCounties}
-      onToggleCounty={handleToggleCounty} />
+      onToggleCounty={handleToggleCounty}
+      hoveredCounties={hoveredCounties}
+      onMouseEnterCounty={handleMouseEnterCounty}
+      onMouseLeaveCounty={handleMouseLeaveCounty} />
   );
 
   return (
