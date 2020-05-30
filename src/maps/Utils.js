@@ -36,7 +36,6 @@ function getCountyFillColor(state, regionMode, selectedCounties, countyToFill) {
   for (const counties of state.regions.values()) {
     if (counties.has(countyToFill)) {
       if (colorIndex >= NUM_REGION_MODE_COLORS) {
-        console.error('Not enough distinct colors to draw regions');
         colorIndex = colorIndex % NUM_REGION_MODE_COLORS;
       }
       return REGION_MODE_COLORS[colorIndex];

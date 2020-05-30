@@ -3634,7 +3634,6 @@ const Virginia = {
         'Covington',
         'Craig',
         'Roanoke',
-        'Roanoke City',
         'Salem',
       ]),
     ],
@@ -3726,6 +3725,7 @@ const Virginia = {
       new Set([
         'Fairfax',
         'Fairfax City',
+        'Falls Church',
       ]),
     ],
     [
@@ -3782,6 +3782,7 @@ const Virginia = {
     [
       'New River',
       new Set([
+        'Floyd',
         'Giles',
         'Montgomery',
         'Pulaski',
