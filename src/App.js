@@ -119,11 +119,26 @@ function ComposedChart(props) {
   );
 }
 
-function useQueryParams() {
+function useQuery(state) {
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
+  const query = new URLSearchParams(location.search);
   return {
-    period: queryParams.get('p'),
+    get period() {
+      return query.get('p') || 60
+    },
+    set period(p) {
+      query.set('p', p);
+    },
+    get regionMode() {
+      return (query.get('m') !== 'c') && (state.regions.size > 0);
+    },
+    set regionMode(m) {
+      query.set('m', m);
+    },
+    toString: () => {
+      const str = query.toString();
+      return str ? `?${str}` : '';
+    },
   };
 }
 
@@ -153,13 +168,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Main(props) {
-  const history = useHistory();
-  const queryParams = useQueryParams();
-
   const {state} = props;
-  const [period, setPeriod] = useState(queryParams.period || 60);
-  const data = useData(state, period);
-  const [regionMode, setRegionMode] = useState(state.regions.size > 0);
+  const history = useHistory();
+  const query = useQuery(state);
+  const data = useData(state, query.period);
   const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(state.counties);
   const [compact, setCompact] = useState(false);
@@ -171,9 +183,9 @@ function Main(props) {
   }
 
   const handleModeToggle = () => {
-    setRegionMode(!regionMode);
-    setSelectedRegions(new Set(state.regions.keys()));
-    setSelectedCounties(state.counties);
+    const statePostalCode = state.postalCode;
+    query.regionMode = query.regionMode ? 'c' : 'r';
+    history.push(`/${statePostalCode}${query.toString()}`);
   };
   const handleRegionToggle = (region) => {
     const newSelectedRegions = new Set(selectedRegions);
@@ -211,7 +223,7 @@ function Main(props) {
   };
 
   const chartData = [];
-  for (var i = period - 1; i >= 0; --i) {
+  for (var i = query.period - 1; i >= 0; --i) {
     chartData.push({
       date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
       cases: 0,
@@ -233,13 +245,13 @@ function Main(props) {
       return;
     }
     for (const date in d.timeline.cases) {
-      const offset = period - today.diff(dayjs(date), 'day') - 1;
+      const offset = query.period - today.diff(dayjs(date), 'day') - 1;
       if (offset >= 0 && d.timeline.cases[date]) {
         chartData[offset].cases += d.timeline.cases[date];
       }
     }
     for (const date in d.timeline.deaths) {
-      const offset = period - today.diff(dayjs(date), 'day') - 1;
+      const offset = query.period - today.diff(dayjs(date), 'day') - 1;
       if (offset >= 0 && d.timeline.deaths[date]) {
         chartData[offset].deaths += d.timeline.deaths[date];
       }
@@ -294,11 +306,8 @@ function Main(props) {
                   value={state.name}
                   onChange={(e) => {
                     const stateName = e.target.value;
-                    if (queryParams.period) {
-                      history.push(`/${States.get(stateName).postalCode}?p=${period}`)
-                    } else {
-                      history.push(`/${States.get(stateName).postalCode}`)
-                    }
+                    const statePostalCode = States.get(stateName).postalCode;
+                    history.push(`/${statePostalCode}${query.toString()}`);
                   }}>
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -310,11 +319,11 @@ function Main(props) {
                 <Select
                   id='period-select'
                   labelId='Period-select-label'
-                  value={period}
+                  value={query.period}
                   onChange={(e) => {
-                    const newPeriod = e.target.value;
-                    history.push(`/${States.get(state.name).postalCode}?p=${newPeriod}`)
-                    setPeriod(newPeriod);
+                    const statePostalCode = state.postalCode;
+                    query.period = e.target.value;
+                    history.push(`/${statePostalCode}${query.toString()}`);
                   }} >
                   <MenuItem value={30}>Last 30 days</MenuItem>
                   <MenuItem value={60}>Last 60 days</MenuItem>
@@ -325,7 +334,7 @@ function Main(props) {
             <Grid item xs={12}>
               <CountySelector
                 state={state}
-                regionMode={regionMode}
+                regionMode={query.regionMode}
                 onModeToggle={handleModeToggle}
                 selectedRegions={selectedRegions}
                 onRegionToggle={handleRegionToggle}
