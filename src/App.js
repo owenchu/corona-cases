@@ -41,6 +41,7 @@ import {
   Route,
   Switch,
   useHistory,
+  useLocation,
 } from 'react-router-dom';
 
 import CountySelector from './CountySelector';
@@ -118,6 +119,14 @@ function ComposedChart(props) {
   );
 }
 
+function useQueryParams() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  return {
+    period: queryParams.get('p'),
+  };
+}
+
 const useStyles = makeStyles((theme) => ({
   logo: {
     flexGrow: 1,
@@ -144,15 +153,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Main(props) {
+  const history = useHistory();
+  const queryParams = useQueryParams();
+
   const {state} = props;
-  const [period, setPeriod] = useState(60);
+  const [period, setPeriod] = useState(queryParams.period || 60);
   const data = useData(state, period);
   const [regionMode, setRegionMode] = useState(state.regions.size > 0);
   const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
   const [selectedCounties, setSelectedCounties] = useState(state.counties);
   const [compact, setCompact] = useState(false);
   const [avgPeriodDays, setAvgPeriodDays] = useState(7);
-  const history = useHistory();
   const classes = useStyles();
 
   if (!data) {
@@ -283,7 +294,11 @@ function Main(props) {
                   value={state.name}
                   onChange={(e) => {
                     const stateName = e.target.value;
-                    history.push(`/${States.get(stateName).postalCode}`)
+                    if (queryParams.period) {
+                      history.push(`/${States.get(stateName).postalCode}?p=${period}`)
+                    } else {
+                      history.push(`/${States.get(stateName).postalCode}`)
+                    }
                   }}>
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -296,7 +311,11 @@ function Main(props) {
                   id='period-select'
                   labelId='Period-select-label'
                   value={period}
-                  onChange={(e) => setPeriod(e.target.value)} >
+                  onChange={(e) => {
+                    const newPeriod = e.target.value;
+                    history.push(`/${States.get(state.name).postalCode}?p=${newPeriod}`)
+                    setPeriod(newPeriod);
+                  }} >
                   <MenuItem value={30}>Last 30 days</MenuItem>
                   <MenuItem value={60}>Last 60 days</MenuItem>
                   <MenuItem value={90}>Last 90 days</MenuItem>
