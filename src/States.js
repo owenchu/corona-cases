@@ -1,6 +1,7 @@
 import React from "react";
 
 import CaliforniaMap from './maps/CaliforniaMap';
+import ColoradoMap from './maps/ColoradoMap';
 import ConnecticutMap from './maps/ConnecticutMap';
 import FloridaMap from './maps/FloridaMap';
 import GeorgiaMap from './maps/GeorgiaMap';
@@ -195,6 +196,259 @@ const California = {
         'Tehama',
         'Yolo',
         'Yuba',
+      ]),
+    ],
+  ]),
+};
+
+const Colorado = {
+  name: 'Colorado',
+  postalCode: 'CO',
+  // https://commons.wikimedia.org/wiki/File:Map_of_Colorado_counties,_blank.svg
+  map: {
+    component: ColoradoMap,
+    position: 'top',
+  },
+  counties: new Set([
+    'Adams',
+    'Alamosa',
+    'Arapahoe',
+    'Archuleta',
+    'Baca',
+    'Bent',
+    'Boulder',
+    'Broomfield',
+    'Chaffee',
+    'Cheyenne',
+    'Clear Creek',
+    'Conejos',
+    'Costilla',
+    'Crowley',
+    'Custer',
+    'Delta',
+    'Denver',
+    'Dolores',
+    'Douglas',
+    'Eagle',
+    'Elbert',
+    'El Paso',
+    'Fremont',
+    'Garfield',
+    'Gilpin',
+    'Grand',
+    'Gunnison',
+    'Hinsdale',
+    'Huerfano',
+    'Jackson',
+    'Jefferson',
+    'Kiowa',
+    'Kit Carson',
+    'Lake',
+    'La Plata',
+    'Larimer',
+    'Las Animas',
+    'Lincoln',
+    'Logan',
+    'Mesa',
+    'Mineral',
+    'Moffat',
+    'Montezuma',
+    'Montrose',
+    'Morgan',
+    'Otero',
+    'Ouray',
+    'Park',
+    'Phillips',
+    'Pitkin',
+    'Prowers',
+    'Pueblo',
+    'Rio Blanco',
+    'Rio Grande',
+    'Routt',
+    'Saguache',
+    'San Juan',
+    'San Miguel',
+    'Sedgwick',
+    'Summit',
+    'Teller',
+    'Washington',
+    'Weld',
+    'Yuma',
+  ]),
+  // https://covid19.colorado.gov/data/incidence-epidemic-curve
+  regions: new Map([
+    [
+      'Adams',
+      new Set([
+        'Adams',
+      ]),
+    ],
+    [
+      'Arapahoe',
+      new Set([
+        'Arapahoe',
+      ]),
+    ],
+    [
+      'Boulder',
+      new Set([
+        'Boulder',
+      ]),
+    ],
+    [
+      'Broomfield',
+      new Set([
+        'Broomfield',
+      ]),
+    ],
+    [
+      'Denver',
+      new Set([
+        'Denver',
+      ]),
+    ],
+    [
+      'Douglas',
+      new Set([
+        'Douglas',
+      ]),
+    ],
+    [
+      'El Paso',
+      new Set([
+        'El Paso',
+      ]),
+    ],
+    [
+      'Jefferson',
+      new Set([
+        'Jefferson',
+      ]),
+    ],
+    [
+      'Larimer',
+      new Set([
+        'Larimer',
+      ]),
+    ],
+    [
+      'Mesa',
+      new Set([
+        'Mesa',
+      ]),
+    ],
+    [
+      'North East',
+      new Set([
+        'Cheyenne',
+        'Elbert',
+        'Kit Carson',
+        'Lincoln',
+        'Logan',
+        'Morgan',
+        'Phillips',
+        'Sedgwick',
+        'Washington',
+        'Yuma',
+      ]),
+    ],
+    [
+      'North West',
+      new Set([
+        'Clear Creek',
+        'Eagle',
+        'Garfield',
+        'Gilpin',
+        'Grand',
+        'Jackson',
+        'Moffat',
+        'Pitkin',
+        'Rio Blanco',
+        'Routt',
+        'Summit',
+      ]),
+    ],
+    [
+      'Pueblo',
+      new Set([
+        'Pueblo',
+      ]),
+    ],
+    [
+      'San Luis',
+      new Set([
+        'Alamosa',
+        'Conejos',
+        'Costilla',
+        'Mineral',
+        'Rio Grande',
+        'Saguache',
+      ]),
+    ],
+    [
+      'South',
+      new Set([
+        'Custer',
+        'Fremont',
+        'Huerfano',
+        'Las Animas',
+      ]),
+    ],
+    [
+      'South Central',
+      new Set([
+        'Chaffee',
+        'Lake',
+        'Park',
+        'Teller',
+      ]),
+    ],
+    [
+      'South East',
+      new Set([
+        'Baca',
+        'Bent',
+        'Crowley',
+        'Kiowa',
+        'Otero',
+        'Prowers',
+      ]),
+    ],
+    [
+      'South West',
+      new Set([
+        'Archuleta',
+        'Dolores',
+        'La Plata',
+        'Montezuma',
+        'San Juan',
+      ]),
+    ],
+    [
+      'Weld',
+      new Set([
+        'Weld',
+      ]),
+    ],
+    [
+      'West',
+      new Set([
+        'Delta',
+        'Gunnison',
+        'Hinsdale',
+        'Montrose',
+        'Ouray',
+        'San Miguel',
+      ]),
+    ],
+  ]),
+  notes: new Map([
+    [
+      'regions',
+      new Set([
+        <>
+          See Colorado's incidence map and epidemic curve map <Link to='https://covid19.colorado.gov/data/incidence-epidemic-curve' text='here' />.
+        </>,
       ]),
     ],
   ]),
@@ -3951,6 +4205,7 @@ const Virginia = {
 
 export default new Map([
   [California.name, California],
+  [Colorado.name, Colorado],
   [Connecticut.name, Connecticut],
   [Florida.name, Florida],
   [Georgia.name, Georgia],
