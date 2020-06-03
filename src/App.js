@@ -23,7 +23,10 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@material-ui/lab';
-import React, {useState} from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
   Bar,
   Line,
@@ -119,26 +122,151 @@ function ComposedChart(props) {
   );
 }
 
-function useQuery(state) {
+// Returns a set of enabled items.
+//
+// `allItems` is an array of items that can either be enabled or disabled
+// according to `bitmaps`. `bitmaps` is a string formed by joining a list of
+// bitmaps with the separator '_'; each bitmap is a 32-bit signed integer.
+//
+// For example, if `bitmaps` in its binary format is as follows:
+//
+//   11000000000000000000000000000110
+//
+// Then the 1st, 2nd, 30th, 31st items are enabled.
+function getEnabledItemsFromBitmaps(allItems, bitmaps) {
+  const enabledItems = new Set();
+  const arr = bitmaps.split('_').map((b) => parseInt(b, 10));
+  const mask = 1 << 31;
+  arr.forEach((n, i) => {
+    let index = i * 32;
+    while (n !== 0) {
+      if (n & mask) {
+        enabledItems.add(allItems[index]);
+      }
+      n <<= 1;
+      ++index;
+    }
+  });
+  return enabledItems;
+}
+
+function getBitmapsfromEnabledItems(enabledItems, allItems) {
+  const arr = [];
+  let index = -1;
+  allItems.forEach((region, i) => {
+    if (i % 32 === 0) {
+      arr.push(0);
+      ++index;
+    }
+    if (enabledItems.has(region)) {
+      arr[index] |= (1 << (31 - i%32));
+    }
+  })
+  return arr.join('_');
+}
+
+// To print numbers in binary format for debugging, see
+// https://stackoverflow.com/questions/9939760/how-do-i-convert-an-integer-to-binary-in-javascript/9939785.
+function useParams(state) {
+  const history = useHistory();
   const location = useLocation();
+  const [currentRegions, setCurrentRegions] = useState(new Set());
+  const [currentCounties, setCurrentCounties] = useState(new Set());
   const query = new URLSearchParams(location.search);
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search);
+    const regionMode = (q.get('m') !== 'c') && (state.regions.size > 0);
+
+    if (regionMode) {
+      const r = q.get('r');
+      let regions;
+      let counties;
+      if (r) {
+        regions = getEnabledItemsFromBitmaps(
+            Array.from(state.regions.keys()), r);
+        counties = new Set();
+        regions.forEach((region) => {
+          state.regions.get(region).forEach((county) => {
+            counties.add(county);
+          });
+        });
+      } else {
+        regions = new Set(state.regions.keys());
+        counties = state.counties;
+      }
+      setCurrentRegions(regions);
+      setCurrentCounties(counties);
+    } else {
+      const c = q.get('c');
+      let counties;
+      if (c) {
+        counties = getEnabledItemsFromBitmaps(
+            Array.from(state.counties.keys()), c);
+      } else {
+        counties = state.counties;
+      }
+      setCurrentCounties(counties);
+    }
+  }, [location.search, state]);
+
+  const refreshPage = (newState) => {
+    const statePostalCode = newState ? newState.postalCode : state.postalCode;
+    if (newState) {
+      // Clear selected regions and counties before loading a new state.
+      query.delete('r');
+      query.delete('c');
+    }
+    const queryStr = query.toString();
+    history.replace(`/${statePostalCode}${queryStr ? `?${queryStr}` : ''}`);
+  };
+
   return {
     get period() {
-      return query.get('p') || 60
+      return query.get('p') || 60;
     },
-    set period(p) {
+    setPeriod(p) {
       query.set('p', p);
+      refreshPage();
     },
+
     get regionMode() {
       return (query.get('m') !== 'c') && (state.regions.size > 0);
     },
-    set regionMode(m) {
-      query.set('m', m);
+    setRegionMode(m) {
+      if (m) {
+        // Switch to region mode.
+        query.set('m', 'r');
+        query.delete('c');
+      } else {
+        // Switch to county mode.
+        query.set('m', 'c');
+        query.delete('r');
+      }
+      refreshPage();
     },
-    toString: () => {
-      const str = query.toString();
-      return str ? `?${str}` : '';
+
+    get selectedRegions() {
+      return currentRegions;
     },
+    setSelectedRegions(regions) {
+      const r = getBitmapsfromEnabledItems(
+          regions, Array.from(state.regions.keys()));
+      query.set('r', r);
+      refreshPage();
+    },
+
+    get selectedCounties() {
+      return currentCounties;
+    },
+    setSelectedCounties(counties) {
+      const c = getBitmapsfromEnabledItems(
+          counties, Array.from(state.counties.keys()));
+      query.set('c', c);
+      refreshPage();
+    },
+
+    refreshPage,
   };
 }
 
@@ -169,11 +297,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Main(props) {
   const {state} = props;
-  const history = useHistory();
-  const query = useQuery(state);
-  const data = useData(state, query.period);
-  const [selectedRegions, setSelectedRegions] = useState(new Set(state.regions.keys()));
-  const [selectedCounties, setSelectedCounties] = useState(state.counties);
+  const params = useParams(state);
+  const data = useData(state, params.period);
   const [compact, setCompact] = useState(false);
   const [avgPeriodDays, setAvgPeriodDays] = useState(7);
   const classes = useStyles();
@@ -183,47 +308,43 @@ function Main(props) {
   }
 
   const handleModeToggle = () => {
-    const statePostalCode = state.postalCode;
-    query.regionMode = query.regionMode ? 'c' : 'r';
-    history.push(`/${statePostalCode}${query.toString()}`);
+    params.setRegionMode(!params.regionMode);
   };
   const handleRegionToggle = (region) => {
-    const newSelectedRegions = new Set(selectedRegions);
-    const newSelectedCounties = new Set(selectedCounties);
-    if (selectedRegions.has(region)) {
+    const newSelectedRegions = new Set(params.selectedRegions);
+    if (params.selectedRegions.has(region)) {
       newSelectedRegions.delete(region);
-      state.regions.get(region).forEach((county) => {
-        newSelectedCounties.delete(county);
-      })
     } else {
       newSelectedRegions.add(region);
-      state.regions.get(region).forEach((county) => {
-        newSelectedCounties.add(county);
-      })
     }
-    setSelectedRegions(newSelectedRegions);
-    setSelectedCounties(newSelectedCounties);
+    params.setSelectedRegions(newSelectedRegions);
   };
   const handleCountyToggle = (county) => {
-    const newSelectedCounties = new Set(selectedCounties);
-    if (selectedCounties.has(county)) {
+    const newSelectedCounties = new Set(params.selectedCounties);
+    if (params.selectedCounties.has(county)) {
       newSelectedCounties.delete(county);
     } else {
       newSelectedCounties.add(county);
     }
-    setSelectedCounties(newSelectedCounties);
+    params.setSelectedCounties(newSelectedCounties);
   };
   const handleSelectAll = () => {
-    setSelectedRegions(new Set(state.regions.keys()));
-    setSelectedCounties(state.counties);
+    if (params.regionMode) {
+      params.setSelectedRegions(new Set(state.regions.keys()));
+    } else {
+      params.setSelectedCounties(state.counties);
+    }
   };
   const handleClearAll = () => {
-    setSelectedRegions(new Set());
-    setSelectedCounties(new Set());
+    if (params.regionMode) {
+      params.setSelectedRegions(new Set());
+    } else {
+      params.setSelectedCounties(new Set());
+    }
   };
 
   const chartData = [];
-  for (var i = query.period - 1; i >= 0; --i) {
+  for (var i = params.period - 1; i >= 0; --i) {
     chartData.push({
       date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
       cases: 0,
@@ -241,17 +362,17 @@ function Main(props) {
     // Normalize county names: https://alligator.io/js/capitalizing-strings.
     const county = normalizeCountyName(state.name, d.county);
 
-    if (!selectedCounties.has(county)) {
+    if (!params.selectedCounties.has(county)) {
       return;
     }
     for (const date in d.timeline.cases) {
-      const offset = query.period - today.diff(dayjs(date), 'day') - 1;
+      const offset = params.period - today.diff(dayjs(date), 'day') - 1;
       if (offset >= 0 && d.timeline.cases[date]) {
         chartData[offset].cases += d.timeline.cases[date];
       }
     }
     for (const date in d.timeline.deaths) {
-      const offset = query.period - today.diff(dayjs(date), 'day') - 1;
+      const offset = params.period - today.diff(dayjs(date), 'day') - 1;
       if (offset >= 0 && d.timeline.deaths[date]) {
         chartData[offset].deaths += d.timeline.deaths[date];
       }
@@ -306,8 +427,7 @@ function Main(props) {
                   value={state.name}
                   onChange={(e) => {
                     const stateName = e.target.value;
-                    const statePostalCode = States.get(stateName).postalCode;
-                    history.push(`/${statePostalCode}${query.toString()}`);
+                    params.refreshPage(States.get(stateName));
                   }}>
                   {Array.from(States.keys()).map((s) =>
                     <MenuItem key={s} value={s}>{s}</MenuItem>
@@ -319,12 +439,8 @@ function Main(props) {
                 <Select
                   id='period-select'
                   labelId='Period-select-label'
-                  value={query.period}
-                  onChange={(e) => {
-                    const statePostalCode = state.postalCode;
-                    query.period = e.target.value;
-                    history.push(`/${statePostalCode}${query.toString()}`);
-                  }} >
+                  value={params.period}
+                  onChange={(e) => params.setPeriod(e.target.value)} >
                   <MenuItem value={30}>Last 30 days</MenuItem>
                   <MenuItem value={60}>Last 60 days</MenuItem>
                   <MenuItem value={90}>Last 90 days</MenuItem>
@@ -334,11 +450,11 @@ function Main(props) {
             <Grid item xs={12}>
               <CountySelector
                 state={state}
-                regionMode={query.regionMode}
+                regionMode={params.regionMode}
                 onModeToggle={handleModeToggle}
-                selectedRegions={selectedRegions}
+                selectedRegions={params.selectedRegions}
                 onRegionToggle={handleRegionToggle}
-                selectedCounties={selectedCounties}
+                selectedCounties={params.selectedCounties}
                 onCountyToggle={handleCountyToggle}
                 onSelectAll={handleSelectAll}
                 onClearAll={handleClearAll} />
