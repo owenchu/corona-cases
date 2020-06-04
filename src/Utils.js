@@ -64,6 +64,17 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Minnesota':
+        switch (countyName) {
+          case 'lac qui parle':
+            return 'Lac qui Parle';
+          case 'lake of the woods':
+            return 'Lake of the Woods';
+          case 'mcleod':
+            return 'McLeod';
+          default: break;
+        }
+        break;
       case 'North Carolina':
         switch (countyName) {
           case 'mcdowell': return 'McDowell';
