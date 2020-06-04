@@ -20,6 +20,7 @@ import PennsylvaniaMap from './maps/PennsylvaniaMap';
 import TennesseeMap from './maps/TennesseeMap';
 import TexasMap from './maps/TexasMap';
 import VirginiaMap from './maps/VirginiaMap';
+import WashingtonMap from './maps/WashingtonMap';
 
 function Link(props) {
   const {to, text} = props;
@@ -4720,6 +4721,154 @@ const Virginia = {
   ]),
 };
 
+const Washington = {
+  name: 'Washington',
+  postalCode: 'WA',
+  // https://commons.wikimedia.org/wiki/File:Blank_Washington_Map.svg
+  map: {
+    component: WashingtonMap,
+    position: 'side',
+  },
+  counties: new Set([
+    'Adams',
+    'Asotin',
+    'Benton',
+    'Chelan',
+    'Clallam',
+    'Clark',
+    'Columbia',
+    'Cowlitz',
+    'Douglas',
+    'Ferry',
+    'Franklin',
+    'Garfield',
+    'Grant',
+    'Grays Harbor',
+    'Island',
+    'Jefferson',
+    'King',
+    'Kitsap',
+    'Kittitas',
+    'Klickitat',
+    'Lewis',
+    'Lincoln',
+    'Mason',
+    'Okanogan',
+    'Pacific',
+    'Pend Oreille',
+    'Pierce',
+    'San Juan',
+    'Skagit',
+    'Skamania',
+    'Snohomish',
+    'Spokane',
+    'Stevens',
+    'Thurston',
+    'Wahkiakum',
+    'Walla Walla',
+    'Whatcom',
+    'Whitman',
+    'Yakima',
+  ]),
+  // https://www.doh.wa.gov/AboutUs/ProgramsandServices/EmergencyPreparednessandResponse/EmergencyPreparednessRegions
+  regions: new Map([
+    [
+      'Central',
+      new Set([
+        'King',
+      ]),
+    ],
+    [
+      'East',
+      new Set([
+        'Adams',
+        'Asotin',
+        'Columbia',
+        'Ferry',
+        'Garfield',
+        'Lincoln',
+        'Pend Oreille',
+        'Spokane',
+        'Stevens',
+        'Whitman',
+      ]),
+    ],
+    [
+      'North',
+      new Set([
+        'Island',
+        'San Juan',
+        'Skagit',
+        'Snohomish',
+        'Whatcom',
+      ]),
+    ],
+    [
+      'North Central',
+      new Set([
+        'Chelan',
+        'Douglas',
+        'Grant',
+        'Kittitas',
+        'Okanogan',
+      ]),
+    ],
+    [
+      'Northwest',
+      new Set([
+        'Clallam',
+        'Jefferson',
+        'Kitsap',
+      ]),
+    ],
+    [
+      'Pierce',
+      new Set([
+        'Pierce',
+      ]),
+    ],
+    [
+      'South Central',
+      new Set([
+        'Benton',
+        'Franklin',
+        'Klickitat',
+        'Walla Walla',
+        'Yakima',
+      ]),
+    ],
+    [
+      'Southwest',
+      new Set([
+        'Clark',
+        'Cowlitz',
+        'Skamania',
+        'Wahkiakum',
+      ]),
+    ],
+    [
+      'West',
+      new Set([
+        'Grays Harbor',
+        'Lewis',
+        'Mason',
+        'Pacific',
+        'Thurston',
+      ]),
+    ],
+  ]),
+  notes: new Map([
+    [
+      'regions',
+      new Set([
+        <>
+          See Washington Emergency Preparedness Regions <Link to='https://www.doh.wa.gov/AboutUs/ProgramsandServices/EmergencyPreparednessandResponse/EmergencyPreparednessRegions' text='here' />.
+        </>,
+      ]),
+    ],
+  ]),
+};
+
 export default new Map([
   [California.name, California],
   [Colorado.name, Colorado],
@@ -4741,4 +4890,5 @@ export default new Map([
   [Tennessee.name, Tennessee],
   [Texas.name, Texas],
   [Virginia.name, Virginia],
+  [Washington.name, Washington],
 ]);
