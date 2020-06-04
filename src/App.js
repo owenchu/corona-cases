@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
 import {
   AppBar,
+  Card,
+  CardContent,
+  CardHeader,
   Checkbox,
   CircularProgress,
   Container,
@@ -375,6 +378,7 @@ function Main(props) {
   }
 
   const today = dayjs().startOf('day');
+  const yesterday = today.subtract(1, 'day');
 
   data.forEach((d) => {
     // Normalize county names: https://alligator.io/js/capitalizing-strings.
@@ -397,9 +401,12 @@ function Main(props) {
     }
   });
 
-  const lastEntry = chartData[chartData.length - 1];
-  if (lastEntry.cases === 0 && lastEntry.deaths === 0) {
+  let chartDataSize = chartData.length;
+  let lastDataEntry = chartData[chartDataSize - 1];
+  if (lastDataEntry.cases === 0 && lastDataEntry.deaths === 0) {
     chartData.pop();
+    chartDataSize -= 1;
+    lastDataEntry = chartData[chartDataSize - 1];
   }
 
   chartData.forEach((d, i, arr) => {
@@ -476,6 +483,42 @@ function Main(props) {
                 onCountyToggle={handleCountyToggle}
                 onSelectAll={handleSelectAll}
                 onClearAll={handleClearAll} />
+            </Grid>
+            <Grid item container xs={12} spacing={2}>
+              <Grid item xs={6}>
+                <Card variant='outlined'>
+                  <CardHeader
+                    title='Cases in Selected Counties'
+                    subheader={
+                      today.format('M/D') === lastDataEntry.date ?
+                        today.format('MMMM D, YYYY') :
+                        yesterday.format('MMMM D, YYYY')
+                    }
+                  />
+                  <CardContent>
+                    <Typography component='h2' variant='h3'>
+                      {lastDataEntry.cases.toLocaleString()}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card variant='outlined'>
+                  <CardHeader
+                    title='Deaths in Selected Counties'
+                    subheader={
+                      today.format('M/D') === lastDataEntry.date ?
+                        today.format('MMMM D, YYYY') :
+                        yesterday.format('MMMM D, YYYY')
+                    }
+                  />
+                  <CardContent>
+                    <Typography component='h2' variant='h3'>
+                      {lastDataEntry.deaths.toLocaleString()}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
