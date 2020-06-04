@@ -87,6 +87,14 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Tennessee':
+        switch (countyName) {
+          case 'dekalb': return 'DeKalb';
+          case 'mcminn': return 'McMinn';
+          case 'mcnairy': return 'McNairy';
+          default: break;
+        }
+        break;
       case 'Texas':
         switch (countyName) {
           case 'dewitt': return 'DeWitt';
