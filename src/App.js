@@ -165,6 +165,17 @@ function getBitmapsfromEnabledItems(enabledItems, allItems) {
   return arr.join('_');
 }
 
+const VALID_PARAMS = new Set([
+  // Period
+  'p',
+  // Mode
+  'm',
+  // Regions
+  'r',
+  // Counties
+  'c',
+]);
+
 // To print numbers in binary format for debugging, see
 // https://stackoverflow.com/questions/9939760/how-do-i-convert-an-integer-to-binary-in-javascript/9939785.
 function useParams(state) {
@@ -217,7 +228,14 @@ function useParams(state) {
       query.delete('r');
       query.delete('c');
     }
-    const queryStr = query.toString();
+    // Clean up invalid params
+    const q = new URLSearchParams()
+    query.forEach((value, key) => {
+      if (VALID_PARAMS.has(key)) {
+        q.set(key, value);
+      }
+    });
+    const queryStr = q.toString();
     history.replace(`/${statePostalCode}${queryStr ? `?${queryStr}` : ''}`);
   };
 
