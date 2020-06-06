@@ -102,7 +102,7 @@ function CountySelector(props) {
         onClick={handleRegionClick.bind(this, r)} />
     ))
   ) : (
-    Array.from(state.counties).map((c) => (
+    Array.from(state.counties.keys()).map((c) => (
       <Chip
         className={classes.chip}
         key={c}

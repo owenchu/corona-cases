@@ -207,7 +207,7 @@ function useParams(state) {
         });
       } else {
         regions = new Set(state.regions.keys());
-        counties = state.counties;
+        counties = new Set(state.counties.keys());
       }
       setCurrentRegions(regions);
       setCurrentCounties(counties);
@@ -218,7 +218,7 @@ function useParams(state) {
         counties = getEnabledItemsFromBitmaps(
             Array.from(state.counties.keys()), c);
       } else {
-        counties = state.counties;
+        counties = new Set(state.counties.keys());
       }
       setCurrentCounties(counties);
     }
@@ -304,6 +304,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200,
     marginRight: theme.spacing(2),
   },
+  card: {
+    height: '100%',
+  },
   chartControl: {
     marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(2),
@@ -353,7 +356,7 @@ function Main(props) {
     if (params.regionMode) {
       params.setSelectedRegions(new Set(state.regions.keys()));
     } else {
-      params.setSelectedCounties(state.counties);
+      params.setSelectedCounties(new Set(state.counties.keys()));
     }
   };
   const handleClearAll = () => {
@@ -430,6 +433,19 @@ function Main(props) {
     arr[i].sevenDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
 
+  var population = 0;
+  params.selectedCounties.forEach((c) => {
+    population += state.counties.get(c).population;
+  });
+
+  // https://coronavirus.jhu.edu/data/mortality
+  const casesPer100kPopulation = lastDataEntry.cases ?
+      Math.ceil(lastDataEntry.cases / population * 100000) : 0;
+  const deathsPer100kPopulation = lastDataEntry.deaths ?
+      Math.ceil(lastDataEntry.deaths / population * 100000) : 0;
+  const deathsPer100Cases = (lastDataEntry.cases && lastDataEntry.deaths) ?
+      Math.ceil(lastDataEntry.deaths / lastDataEntry.cases * 100) : 0;
+
   return (
     <>
       <AppBar elevation={0}>
@@ -484,40 +500,61 @@ function Main(props) {
                 onSelectAll={handleSelectAll}
                 onClearAll={handleClearAll} />
             </Grid>
-            <Grid item container xs={12} spacing={2}>
-              <Grid item xs={6}>
-                <Card variant='outlined'>
-                  <CardHeader
-                    title='Cases in Selected Counties'
-                    subheader={
-                      today.format('M/D') === lastDataEntry.date ?
-                        today.format('MMMM D, YYYY') :
-                        yesterday.format('MMMM D, YYYY')
-                    }
-                  />
-                  <CardContent>
-                    <Typography component='h2' variant='h3'>
-                      {lastDataEntry.cases.toLocaleString()}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={6}>
-                <Card variant='outlined'>
-                  <CardHeader
-                    title='Deaths in Selected Counties'
-                    subheader={
-                      today.format('M/D') === lastDataEntry.date ?
-                        today.format('MMMM D, YYYY') :
-                        yesterday.format('MMMM D, YYYY')
-                    }
-                  />
-                  <CardContent>
-                    <Typography component='h2' variant='h3'>
-                      {lastDataEntry.deaths.toLocaleString()}
-                    </Typography>
-                  </CardContent>
-                </Card>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <Card className={classes.card} variant='outlined'>
+                    <CardHeader title='Population' subheader='2019 census data (census.gov)' />
+                    <CardContent>
+                      <Typography component='h2' variant='h3'>
+                        {population.toLocaleString()}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={4}>
+                  <Card className={classes.card} variant='outlined'>
+                    <CardHeader
+                      title='Cases'
+                      subheader={
+                        today.format('M/D') === lastDataEntry.date ?
+                          today.format('MMMM D, YYYY') :
+                          yesterday.format('MMMM D, YYYY')
+                      }
+                    />
+                    <CardContent>
+                      <Typography component='h2' variant='h3'>
+                        {lastDataEntry.cases.toLocaleString()}
+                      </Typography>
+                      <Typography color='textSecondary'>
+                        {casesPer100kPopulation.toLocaleString()} per 100,000 population
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={4}>
+                  <Card className={classes.card} variant='outlined'>
+                    <CardHeader
+                      title='Deaths'
+                      subheader={
+                        today.format('M/D') === lastDataEntry.date ?
+                          today.format('MMMM D, YYYY') :
+                          yesterday.format('MMMM D, YYYY')
+                      }
+                    />
+                    <CardContent>
+                      <Typography component='h2' variant='h3'>
+                        {lastDataEntry.deaths.toLocaleString()}
+                      </Typography>
+                      <Typography color='textSecondary'>
+                        {deathsPer100kPopulation.toLocaleString()} per 100,000 population
+                      </Typography>
+                      <Typography color='textSecondary'>
+                        {deathsPer100Cases.toLocaleString()} per 100 cases
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12}>
