@@ -1,5 +1,6 @@
 import React from "react";
 
+import ArizonaMap from './maps/ArizonaMap';
 import CaliforniaMap from './maps/CaliforniaMap';
 import ColoradoMap from './maps/ColoradoMap';
 import ConnecticutMap from './maps/ConnecticutMap';
@@ -28,6 +29,34 @@ function Link(props) {
 }
 
 // Population data is from https://www.census.gov/data/datasets/time-series/demo/popest/2010s-counties-total.html.
+
+const Arizona = {
+  name: 'Arizona',
+  postalCode: 'AZ',
+  // https://commons.wikimedia.org/wiki/File:Blank_Map_of_Arizona.svg
+  map: {
+    component: ArizonaMap,
+    position: 'side',
+  },
+  counties: new Map([
+    ['Apache',      {population: 71887  }],
+    ['Cochise',     {population: 125922 }],
+    ['Coconino',    {population: 143476 }],
+    ['Gila',        {population: 54018  }],
+    ['Graham',      {population: 38837  }],
+    ['Greenlee',    {population: 9498   }],
+    ['La Paz',      {population: 21108  }],
+    ['Maricopa',    {population: 4485414}],
+    ['Mohave',      {population: 212181 }],
+    ['Navajo',      {population: 110924 }],
+    ['Pima',        {population: 1047279}],
+    ['Pinal',       {population: 462789 }],
+    ['Santa Cruz',  {population: 46498  }],
+    ['Yavapai',     {population: 235099 }],
+    ['Yuma',        {population: 213787 }],
+  ]),
+  regions: new Map(),
+};
 
 const California = {
   name: 'California',
@@ -4877,6 +4906,7 @@ const Washington = {
 };
 
 export default new Map([
+  [Arizona.name, Arizona],
   [California.name, California],
   [Colorado.name, Colorado],
   [Connecticut.name, Connecticut],
