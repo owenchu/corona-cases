@@ -52,7 +52,6 @@ import {
 
 import CountySelector from './CountySelector';
 import {useData} from './Data';
-import {normalizeCountyName} from './Utils';
 import States from './States';
 
 function Chart(props) {
@@ -320,9 +319,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Main(props) {
+  const today = dayjs().startOf('day');
+  const yesterday = today.subtract(1, 'day');
+
   const {state} = props;
   const params = useParams(state);
-  const data = useData(state, params.period);
+  const data = useData(state, today.valueOf());
   const [compact, setCompact] = useState(false);
   const [avgPeriodDays, setAvgPeriodDays] = useState(7);
   const classes = useStyles();
@@ -380,27 +382,14 @@ function Main(props) {
     });
   }
 
-  const today = dayjs().startOf('day');
-  const yesterday = today.subtract(1, 'day');
-
-  data.forEach((d) => {
-    // Normalize county names: https://alligator.io/js/capitalizing-strings.
-    const county = normalizeCountyName(state.name, d.county);
-
+  data.forEach((timeline, county) => {
     if (!params.selectedCounties.has(county)) {
       return;
     }
-    for (const date in d.timeline.cases) {
-      const offset = params.period - today.diff(dayjs(date), 'day') - 1;
-      if (offset >= 0 && d.timeline.cases[date]) {
-        chartData[offset].cases += d.timeline.cases[date];
-      }
-    }
-    for (const date in d.timeline.deaths) {
-      const offset = params.period - today.diff(dayjs(date), 'day') - 1;
-      if (offset >= 0 && d.timeline.deaths[date]) {
-        chartData[offset].deaths += d.timeline.deaths[date];
-      }
+    for (let i = 0; i < params.period; ++i) {
+      const offset = 90 - params.period + i;
+      chartData[i].cases += timeline.cases[offset];
+      chartData[i].deaths += timeline.deaths[offset];
     }
   });
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
 import {
   useEffect,
   useState,
@@ -6,41 +7,56 @@ import {
 
 import {normalizeCountyName} from './Utils';
 
-// May need to use an LRU cache if more states are supported.
-const cachedDataMap = new Map();
+// Always fetch 90 days of data.
+const NUM_DAYS = 90;
 
-function useData(state, period) {
+function useData(state, todayTimestamp) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const key = `${state.postalCode}_${period}`;
     const fetchData = async () => {
       try {
-        if (cachedDataMap.has(key)) {
-          setData(cachedDataMap.get(key));
-          return;
-        }
+        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${state.name.toLowerCase()}?lastdays=${NUM_DAYS}`);
+        const map = new Map();
+        const today = dayjs(todayTimestamp);
 
-        const result = await axios.get(`https://corona.lmao.ninja/v2/historical/usacounties/${state.name.toLowerCase()}?lastdays=${period}`);
         result.data.forEach((d) => {
           if (d.county.startsWith('out of') || d.county === 'unassigned') {
             return;
           }
+
           const county = normalizeCountyName(state.name, d.county);
           if (!state.counties.has(county)) {
             console.error(`Unrecognized county returned by API: ${county}`);
+            return;
           }
+
+          const timeline = {};
+          timeline.cases = Array(90).fill(0);
+          for (const date in d.timeline.cases) {
+            const offset = NUM_DAYS - today.diff(dayjs(date), 'day') - 1;
+            if (offset >= 0) {
+              timeline.cases[offset] = d.timeline.cases[date];
+            }
+          }
+          timeline.deaths = Array(90).fill(0);
+          for (const date in d.timeline.deaths) {
+            const offset = NUM_DAYS - today.diff(dayjs(date), 'day') - 1;
+            if (offset >= 0) {
+              timeline.deaths[offset] = d.timeline.deaths[date];
+            }
+          }
+          map.set(county, timeline);
         });
 
-        setData(result.data);
-        cachedDataMap.set(key, result.data);
+        setData(map);
       } catch (error) {
         console.log(error);
         setData(null);
       }
     };
     fetchData();
-  }, [state, period]);
+  }, [state, todayTimestamp]);
 
   return data;
 }
