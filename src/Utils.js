@@ -41,6 +41,12 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Iowa':
+        switch (countyName) {
+          case "o'brien": return "O'Brien";
+          default: break;
+        }
+        break;
       case 'Louisiana':
         switch (countyName) {
           case 'de soto': return 'DeSoto';
