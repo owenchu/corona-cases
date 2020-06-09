@@ -117,6 +117,12 @@ function normalizeCountyName(stateName, countyName) {
           default: break;
         }
         break;
+      case 'Wisconsin':
+        switch (countyName) {
+          case 'fond du lac': return 'Fond du Lac';
+          default: break;
+        }
+        break;
       default:
         break;
     }
