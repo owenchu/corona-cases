@@ -377,8 +377,8 @@ function Main(props) {
       deaths: 0,
       newCases: 0,
       newDeaths: 0,
-      sevenDayAvgNewCases: 0,
-      sevenDayAvgNewDeaths: 0,
+      nDayAvgNewCases: 0,
+      nDayAvgNewDeaths: 0,
     });
   }
 
@@ -418,8 +418,8 @@ function Main(props) {
       newDeaths += arr[j].newDeaths;
       ++days;
     }
-    arr[i].sevenDayAvgNewCases = Math.ceil(newCases / days);
-    arr[i].sevenDayAvgNewDeaths = Math.ceil(newDeaths / days);
+    arr[i].nDayAvgNewCases = Math.ceil(newCases / days);
+    arr[i].nDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
 
   var population = 0;
@@ -579,7 +579,7 @@ function Main(props) {
                   primaryDataName='New cases'
                   primaryDataKey='newCases'
                   secondaryDataName={avgPeriodDays && `${avgPeriodDays}-day average`}
-                  secondaryDataKey={avgPeriodDays && 'sevenDayAvgNewCases'} />
+                  secondaryDataKey={avgPeriodDays && 'nDayAvgNewCases'} />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
@@ -590,7 +590,7 @@ function Main(props) {
                   primaryDataName='New deaths'
                   primaryDataKey='newDeaths'
                   secondaryDataName={avgPeriodDays && `${avgPeriodDays}-day average`}
-                  secondaryDataKey={avgPeriodDays && 'sevenDayAvgNewDeaths'} />
+                  secondaryDataKey={avgPeriodDays && 'nDayAvgNewDeaths'} />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
