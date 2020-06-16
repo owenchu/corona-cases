@@ -142,7 +142,15 @@ function CountySelector(props) {
       <ExpansionPanel defaultExpanded variant='outlined'>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={classes.countySelectionPanelSummary} noWrap>
-            <b>Selected counties:</b> {Array.from(selectedCounties).sort().join(', ')}
+            {regionMode ? (
+              <>
+                <b>Selected regions:</b> {Array.from(selectedRegions).sort().join(', ')}
+              </>
+            ) : (
+              <>
+                <b>Selected counties:</b> {Array.from(selectedCounties).sort().join(', ')}
+              </>
+            )}
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
