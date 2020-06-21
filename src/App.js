@@ -45,6 +45,7 @@ import {
 } from 'recharts';
 import {
   BrowserRouter as Router,
+  Redirect,
   Route,
   Switch,
   useHistory,
@@ -809,7 +810,7 @@ function App() {
       <Switch>
         {routes}
         <Route path='*'>
-          <Main state={States.get('California')} />
+          <Redirect to={`/${States.get('California').postalCode}`} />
         </Route>
       </Switch>
     </Router>
