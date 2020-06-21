@@ -121,7 +121,13 @@ function ComposedChart(props) {
             <Legend verticalAlign='top' height={30} />
             <Bar name={primaryDataName} dataKey={primaryDataKey} fill="#32afa9" />
             {secondaryDataName && secondaryDataKey &&
-              <Line name={secondaryDataName} type='monotone' dataKey={secondaryDataKey} stroke='#ff7300' dot={false} />
+              <Line
+                name={secondaryDataName}
+                type='monotone'
+                dataKey={secondaryDataKey}
+                stroke='#ff7300'
+                strokeWidth={2}
+                dot={false} />
             }
           </RechartsComposedChart>
         </ResponsiveContainer>
@@ -148,6 +154,7 @@ function RegionsChart(props) {
         type='monotone'
         dataKey={(d) => d[r][dataKey]}
         stroke={REGION_MODE_COLORS[colorIndex % NUM_REGION_MODE_COLORS]}
+        strokeWidth='3'
         dot={false} />
     )
   }
