@@ -123,8 +123,14 @@ function MainContainer(props) {
                   labelId='Period-select-label'
                   value={period}
                   onChange={handlePeriodChange}>
+                  <MenuItem value={10}>Last 10 days</MenuItem>
+                  <MenuItem value={20}>Last 20 days</MenuItem>
                   <MenuItem value={30}>Last 30 days</MenuItem>
+                  <MenuItem value={40}>Last 40 days</MenuItem>
+                  <MenuItem value={50}>Last 50 days</MenuItem>
                   <MenuItem value={60}>Last 60 days</MenuItem>
+                  <MenuItem value={70}>Last 70 days</MenuItem>
+                  <MenuItem value={80}>Last 80 days</MenuItem>
                   <MenuItem value={90}>Last 90 days</MenuItem>
                 </Select>
               </FormControl>
