@@ -1,12 +1,12 @@
 // https://coolors.co/fedc85-fdd05e-fcbe22-dd9f03-f6bd8d-f6b179-f4a666-f29040
-// https://coolors.co/ddebea-bfd9d7-a5cac8-98c3c1-e0ccd0-d1b3b9-c19aa2-b1818a
+// https://coolors.co/cce1df-b3d1cf-a5cac8-98c3c1-e0ccd0-d1b3b9-c19aa2-b1818a
 // https://coolors.co/cceabb-b9e2a1-a2d982-8bcf63-70a7ff-478eff-1f75ff-0a68ff
 // https://coolors.co/cec6de-bcb1d2-b1a4cb-a697c3-e98686-e36464-df5353-dc4141
 // https://coolors.co/dfdca9-d2ce89-c8c36a-bdb74c
 const REGION_MODE_COLORS = [
   '#fedc85',
   '#f6bd8d',
-  '#ddebea',
+  '#cce1df',
   '#e0ccd0',
   '#cceabb',
   '#70a7ff',
@@ -15,7 +15,7 @@ const REGION_MODE_COLORS = [
   '#dfdca9',
   '#fdd05e',
   '#f6b179',
-  '#bfd9d7',
+  '#b3d1cf',
   '#d1b3b9',
   '#b9e2a1',
   '#478eff',
