@@ -567,7 +567,9 @@ function Main(props) {
       <AppBar elevation={0}>
         <Toolbar>
           <Typography className={classes.logo} component='h1' variant='h5'>
-            Corona Cases
+            <Link href='/' color='inherit' underline='none'>
+              Corona Cases
+            </Link>
           </Typography>
         </Toolbar>
       </AppBar>
