@@ -93,5 +93,7 @@ function useMap(mapProps) {
 }
 
 export {
+  NUM_REGION_MODE_COLORS,
+  REGION_MODE_COLORS,
   useMap,
 };

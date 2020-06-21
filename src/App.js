@@ -32,8 +32,9 @@ import React, {
 } from 'react';
 import {
   Bar,
-  Line,
   BarChart,
+  Line,
+  LineChart,
   CartesianGrid,
   ComposedChart as RechartsComposedChart,
   Legend,
@@ -53,6 +54,10 @@ import {
 import CountySelector from './CountySelector';
 import {useData} from './Data';
 import States from './States';
+import {
+  NUM_REGION_MODE_COLORS,
+  REGION_MODE_COLORS,
+} from './maps/Utils';
 
 function Chart(props) {
   const theme = useTheme();
@@ -120,6 +125,56 @@ function ComposedChart(props) {
           </RechartsComposedChart>
         </ResponsiveContainer>
       }
+    </>
+  );
+}
+
+function RegionsChart(props) {
+  const theme = useTheme();
+  const {title, data, dataKey, regions, selectedRegions} = props;
+
+  const lines = [];
+  let colorIndex = -1;
+  for (const r of regions.keys()) {
+    ++colorIndex;
+    if (!selectedRegions.has(r)) {
+      continue;
+    }
+    lines.push(
+      <Line
+        key={r}
+        name={r}
+        type='monotone'
+        dataKey={(d) => d[r][dataKey]}
+        stroke={REGION_MODE_COLORS[colorIndex % NUM_REGION_MODE_COLORS]}
+        dot={false} />
+    )
+  }
+
+  return (
+    <>
+      <Typography
+        component='h2'
+        variant='h6'
+        gutterBottom>
+        {title}
+      </Typography>
+      <ResponsiveContainer height='100%' width='100%'>
+        <LineChart
+          data={data}
+          margin={{
+            top: theme.spacing(3),
+            right: theme.spacing(3),
+            bottom: theme.spacing(3),
+            left: theme.spacing(1),
+          }}>
+          <CartesianGrid strokeDasharray="2 2" />
+          <XAxis dataKey='date' stroke={theme.palette.text.secondary} angle={-45} textAnchor='end' />
+          <YAxis scale='linear' stroke={theme.palette.text.secondary} allowDecimals={false}/>
+          <Tooltip />
+          {lines}
+        </LineChart>
+      </ResponsiveContainer>
     </>
   );
 }
@@ -316,6 +371,12 @@ const useStyles = makeStyles((theme) => ({
     height: 300,
     padding: theme.spacing(2),
   },
+  regionChartContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: 450,
+    padding: theme.spacing(2),
+  },
 }));
 
 function Main(props) {
@@ -369,10 +430,14 @@ function Main(props) {
     }
   };
 
-  const chartData = [];
+  const aggregateData = [];
+  const regionData = [];
+
   for (var i = params.period - 1; i >= 0; --i) {
-    chartData.push({
-      date: dayjs().startOf('day').subtract(i, 'day').format('M/D'),
+    const date = dayjs().startOf('day').subtract(i, 'day').format('M/D');
+
+    aggregateData.push({
+      date,
       cases: 0,
       deaths: 0,
       newCases: 0,
@@ -380,28 +445,60 @@ function Main(props) {
       nDayAvgNewCases: 0,
       nDayAvgNewDeaths: 0,
     });
+
+    if (params.regionMode) {
+      const regionDataEntry = {date};
+      params.selectedRegions.forEach((r) => {
+        regionDataEntry[r] = {
+          cases: 0,
+          deaths: 0,
+          newCases: 0,
+          newDeaths: 0,
+          nDayAvgNewCases: 0,
+          nDayAvgNewDeaths: 0,
+        };
+      });
+      regionData.push(regionDataEntry);
+    }
   }
 
   data.forEach((timeline, county) => {
-    if (!params.selectedCounties.has(county)) {
-      return;
+    if (params.selectedCounties.has(county)) {
+      for (let i = 0; i < params.period; ++i) {
+        const offset = 90 - params.period + i;
+        aggregateData[i].cases += timeline.cases[offset];
+        aggregateData[i].deaths += timeline.deaths[offset];
+      }
     }
-    for (let i = 0; i < params.period; ++i) {
-      const offset = 90 - params.period + i;
-      chartData[i].cases += timeline.cases[offset];
-      chartData[i].deaths += timeline.deaths[offset];
+
+    if (params.regionMode) {
+      for (const region of params.selectedRegions) {
+        const counties = state.regions.get(region);
+        if (counties.has(county)) {
+          for (let i = 0; i < params.period; ++i) {
+            const offset = 90 - params.period + i;
+            regionData[i][region].cases += timeline.cases[offset];
+            regionData[i][region].deaths += timeline.deaths[offset];
+          }
+          break;
+        }
+      }
     }
   });
 
-  let chartDataSize = chartData.length;
-  let lastDataEntry = chartData[chartDataSize - 1];
+  let aggregateDataSize = aggregateData.length;
+  let lastDataEntry = aggregateData[aggregateDataSize - 1];
   if (lastDataEntry.cases === 0 && lastDataEntry.deaths === 0) {
-    chartData.pop();
-    chartDataSize -= 1;
-    lastDataEntry = chartData[chartDataSize - 1];
+    aggregateData.pop();
+    aggregateDataSize -= 1;
+    lastDataEntry = aggregateData[aggregateDataSize - 1];
+
+    if (params.regionMode) {
+      regionData.pop();
+    }
   }
 
-  chartData.forEach((d, i, arr) => {
+  aggregateData.forEach((d, i, arr) => {
     if (i === 0) {
       return;
     }
@@ -421,6 +518,35 @@ function Main(props) {
     arr[i].nDayAvgNewCases = Math.ceil(newCases / days);
     arr[i].nDayAvgNewDeaths = Math.ceil(newDeaths / days);
   });
+
+  if (params.regionMode) {
+    regionData.forEach((d, i) => {
+      if (i === 0) {
+        return;
+      }
+
+      for (const key in d) {
+        if (key === 'date') {
+          continue;
+        }
+        const region = key;
+        d[region].newCases = d[region].cases - regionData[i-1][region].cases;
+        d[region].newDeaths = d[region].deaths - regionData[i-1][region].deaths;
+
+        // Compute N-day averages.
+        var newCases = 0;
+        var newDeaths = 0;
+        var days = 0;
+        for (var j = i; j >= 0 && (i - j) < avgPeriodDays; --j) {
+          newCases += regionData[j][region].newCases;
+          newDeaths += regionData[j][region].newDeaths;
+          ++days;
+        }
+        d[region].nDayAvgNewCases = Math.ceil(newCases / days);
+        d[region].nDayAvgNewDeaths = Math.ceil(newDeaths / days);
+      }
+    });
+  }
 
   var population = 0;
   params.selectedCounties.forEach((c) => {
@@ -565,7 +691,11 @@ function Main(props) {
                 exclusive
                 size='small'
                 value={avgPeriodDays}
-                onChange={(e, v) => setAvgPeriodDays(v)}>
+                onChange={(e, v) => {
+                  if (v) {
+                    setAvgPeriodDays(v);
+                  }
+                }}>
                 <ToggleButton value={3}>3-day avg</ToggleButton>
                 <ToggleButton value={5}>5-day avg</ToggleButton>
                 <ToggleButton value={7}>7-day avg</ToggleButton>
@@ -575,34 +705,78 @@ function Main(props) {
               <Paper className={classes.chartContainer} variant='outlined'>
                 <ComposedChart
                   title='New Cases'
-                  data={chartData}
+                  data={aggregateData}
                   primaryDataName='New cases'
                   primaryDataKey='newCases'
-                  secondaryDataName={avgPeriodDays && `${avgPeriodDays}-day average`}
-                  secondaryDataKey={avgPeriodDays && 'nDayAvgNewCases'} />
+                  secondaryDataName={`${avgPeriodDays}-day average`}
+                  secondaryDataKey='nDayAvgNewCases' />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.chartContainer} variant='outlined'>
                 <ComposedChart
                   title='New Deaths'
-                  data={chartData}
+                  data={aggregateData}
                   primaryDataName='New deaths'
                   primaryDataKey='newDeaths'
-                  secondaryDataName={avgPeriodDays && `${avgPeriodDays}-day average`}
-                  secondaryDataKey={avgPeriodDays && 'nDayAvgNewDeaths'} />
+                  secondaryDataName={`${avgPeriodDays}-day average`}
+                  secondaryDataKey='nDayAvgNewDeaths' />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.chartContainer} variant='outlined'>
-                <Chart title='Total Cases' data={chartData} dataKey='cases' />
+                <Chart title='Total Cases' data={aggregateData} dataKey='cases' />
               </Paper>
             </Grid>
             <Grid item xs={compact ? 6 : 12}>
               <Paper className={classes.chartContainer} variant='outlined'>
-                <Chart title='Total Deaths' data={chartData} dataKey='deaths' />
+                <Chart title='Total Deaths' data={aggregateData} dataKey='deaths' />
               </Paper>
             </Grid>
+            {params.regionMode &&
+              <>
+                <Grid item xs={12}>
+                  <Paper className={classes.regionChartContainer} variant='outlined'>
+                    <RegionsChart
+                      title={`${avgPeriodDays}-Day Average New Cases by Region`}
+                      data={regionData}
+                      dataKey='nDayAvgNewCases'
+                      regions={state.regions}
+                      selectedRegions={params.selectedRegions}/>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.regionChartContainer} variant='outlined'>
+                    <RegionsChart
+                      title={`${avgPeriodDays}-Day Average New Deaths by Region`}
+                      data={regionData}
+                      dataKey='nDayAvgNewDeaths'
+                      regions={state.regions}
+                      selectedRegions={params.selectedRegions}/>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.regionChartContainer} variant='outlined'>
+                    <RegionsChart
+                      title='Total Cases by Region'
+                      data={regionData}
+                      dataKey='cases'
+                      regions={state.regions}
+                      selectedRegions={params.selectedRegions}/>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.regionChartContainer} variant='outlined'>
+                    <RegionsChart
+                      title='Total Deaths by Region'
+                      data={regionData}
+                      dataKey='deaths'
+                      regions={state.regions}
+                      selectedRegions={params.selectedRegions}/>
+                  </Paper>
+                </Grid>
+              </>
+            }
             <Grid item xs={12}>
               <Typography>
                 GitHub repo: <Link href='https://github.com/owenchu/corona-cases'>owenchu/corona-cases</Link>
