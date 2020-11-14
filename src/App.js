@@ -168,7 +168,7 @@ function Chart(props) {
             <XAxis dataKey='date' stroke={theme.palette.text.secondary} angle={-45} textAnchor='end' />
             <YAxis stroke={theme.palette.text.secondary} allowDecimals={false}/>
             <Tooltip />
-            <Bar dataKey={dataKey} fill="#32afa9" />
+            <Bar dataKey={dataKey} barSize={8} fill="#32afa9" />
           </BarChart>
         </ResponsiveContainer>
       }
@@ -202,7 +202,7 @@ function ComposedChart(props) {
             <YAxis stroke={theme.palette.text.secondary} allowDecimals={false}/>
             <Tooltip />
             <Legend verticalAlign='top' height={30} />
-            <Bar name={primaryDataName} dataKey={primaryDataKey} fill="#32afa9" />
+            <Bar name={primaryDataName} dataKey={primaryDataKey} barSize={8} fill="#32afa9" />
             {secondaryDataName && secondaryDataKey &&
               <Line
                 name={secondaryDataName}
